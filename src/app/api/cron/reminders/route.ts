@@ -64,7 +64,7 @@ export async function GET(request: Request) {
       console.log(appointments);
       for (const appt of appointments) {
         try {
-          await qstash.publishJSON({
+         const result = await qstash.publishJSON({
             url: targetUrl,
             body: {
               appointmentId: appt.id,
@@ -75,6 +75,7 @@ export async function GET(request: Request) {
             retries: 3,
           });
           queued++;
+          console.log(result)
         } catch (error) {
           const message = error instanceof Error ? error.message : String(error);
           console.error(

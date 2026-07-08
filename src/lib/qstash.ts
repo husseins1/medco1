@@ -12,16 +12,16 @@ let _client: Client | null = null;
 
 export function getQstashClient(): Client {
   if (!_client) {
-    _client = new Client({ token: getQstashToken(),baseUrl: process.env.QSTASH_URL });
+    _client = new Client({ token: getQstashToken() });
   }
   return _client;
 }
 
 export function getBaseUrl(): string {
-  if (process.env.VERCEL_URL) {
-    return `https://${process.env.VERCEL_URL}`;
+  if (process.env.NEXT_PUBLIC_SITE_URL) {
+    return `https://${process.env.NEXT_PUBLIC_SITE_URL}`;
   }
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
+  const siteUrl = process.env.VERCEL_URL;
   if (siteUrl) {
     return siteUrl;
   }
