@@ -16,6 +16,11 @@ const envSchema = z.object({
   PHONE_NUMBER_ID: z.string().optional(),
   WABA_ID: z.string().optional(),
   CRON_SECRET: z.string().optional(),
+  QSTASH_TOKEN: z.string().optional(),
+  QSTASH_CURRENT_SIGNING_KEY: z.string().optional(),
+  QSTASH_NEXT_SIGNING_KEY: z.string().optional(),
+  VERCEL_URL: z.string().optional(),
+  QSTASH_URL: z.string().optional(),
 });
 
 export function validateEnv() {
