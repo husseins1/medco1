@@ -12,6 +12,7 @@ export interface Service {
   color: string
   price: number | null
   isActive: boolean
+  isSetupDefault: boolean
   createdAt: string
   updatedAt: string
 }

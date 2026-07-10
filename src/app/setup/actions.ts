@@ -216,6 +216,7 @@ export async function submitSetupWizard(formData: FormData) {
             tenantId: newTenant.id,
             color: "#3B82F6",
             duration: 30,
+            isSetupDefault: true,
           }
         })
         await tx.service.create({
@@ -226,6 +227,7 @@ export async function submitSetupWizard(formData: FormData) {
             tenantId: newTenant.id,
             color: "#10B981",
             duration: 30,
+            isSetupDefault: true,
           }
         })
 

@@ -123,15 +123,17 @@ export default function ServicesPageClient({ isAdmin }: ServicesPageClientProps)
   }
 
   const handleDeleteClick = (id: string, name: string) => {
+    
     confirm({
       title: "حذف الخدمة",
       message: `هل أنت متأكد من حذف خدمة "${name}"؟ لا يمكن التراجع عن هذا الإجراء.`,
-      onConfirm: () => handleDelete(id),
+      onConfirm: () =>  handleDelete(id),
     })
   }
 
   const handleDelete = async (id?: string) => {
     const targetId = id ?? deletingId
+    console.log("Deleting service with ID:",id);
     if (!targetId) return
 
     closeConfirm()
@@ -213,7 +215,7 @@ export default function ServicesPageClient({ isAdmin }: ServicesPageClientProps)
                     {service.isActive ? "نشـط" : "غير نشط"}
                   </div>
 
-                  {isAdmin && (
+                      {isAdmin && (
                     <div className="flex items-center gap-1 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity">
                       <button
                         onClick={() => handleOpenModal(service)}
@@ -222,13 +224,15 @@ export default function ServicesPageClient({ isAdmin }: ServicesPageClientProps)
                       >
                         <Edit2 className="w-4 h-4" />
                       </button>
-                      <button
-                        onClick={() => handleDeleteClick(service.id, service.name)}
-                        disabled={isPending}
-                        className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
+                      {!service.isSetupDefault && (
+                        <button
+                          onClick={() => handleDeleteClick(service.id, service.name)}
+                          disabled={isPending}
+                          className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      )}
                     </div>
                   )}
                 </div>
@@ -379,7 +383,11 @@ export default function ServicesPageClient({ isAdmin }: ServicesPageClientProps)
         message={confirmState.message}
         confirmLabel="حذف"
         cancelLabel="إلغاء"
-        onConfirm={handleDelete}
+        onConfirm={() => {
+    if (confirmState.onConfirm) {
+      confirmState.onConfirm()
+    }
+  }}
         onCancel={closeConfirm}
         type="danger"
       />

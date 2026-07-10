@@ -199,7 +199,8 @@ model Service {
   duration    Int
   color       String
   price       Decimal?
-  isActive    Boolean  @default(true)
+  isActive        Boolean  @default(true)
+  isSetupDefault  Boolean  @default(false)
 
   appointments Appointment[]
 

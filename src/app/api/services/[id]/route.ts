@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { Prisma } from "@prisma/client";
 import { createClient } from "@/utils/supabase/server";
 import prisma from "@/lib/prisma";
 import { serviceUpdateSchema } from "@/lib/schemas/service";
@@ -123,9 +124,29 @@ export async function DELETE(request: Request, { params }: RouteParams) {
     return NextResponse.json({ error: "Service not found" }, { status: 404 });
   }
 
-  await prisma.service.delete({
-    where: { id },
-  });
+  if (existing.isSetupDefault) {
+    return NextResponse.json(
+      { error: "لا يمكن حذف الخدمات الافتراضية التي تم إنشاؤها أثناء الإعداد." },
+      { status: 400 }
+    );
+  }
+
+  try {
+    await prisma.service.delete({
+      where: { id },
+    });
+  } catch (err) {
+    if (
+      err instanceof Prisma.PrismaClientKnownRequestError &&
+      err.code === "P2003"
+    ) {
+      return NextResponse.json(
+        { error: "لا يمكن حذف هذه الخدمة لأنها مرتبطة بمواعيد قائمة. يرجى حذف المواعيد المرتبطة أولاً." },
+        { status: 409 }
+      );
+    }
+    throw err;
+  }
 
   return new NextResponse(null, { status: 204 });
 }
