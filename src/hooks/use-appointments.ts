@@ -266,6 +266,7 @@ export function useRescheduleAppointment(from: Date, to: Date) {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: getQueryKey(from, to) });
+      queryClient.invalidateQueries({ queryKey: ["appointments"] });
     },
   });
 }

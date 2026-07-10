@@ -163,6 +163,9 @@ export async function POST(request: Request) {
           lastName: data.newPatient.lastName,
           phone: data.newPatient.phone,
           source: data.newPatient.source,
+          dateOfBirth: data.newPatient.dateOfBirth ? new Date(data.newPatient.dateOfBirth) : undefined,
+          gender: data.newPatient.gender,
+          address: data.newPatient.address,
         },
       });
       patientId = newPatient.id;
