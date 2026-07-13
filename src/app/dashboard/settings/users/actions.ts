@@ -164,6 +164,9 @@ export async function deleteUser(formData: FormData) {
       data: { deletedAt: new Date(), tenantId: null },
     });
 
+    await prisma.doctorAvailability.deleteMany({ where: { doctorId: userId } });
+    await prisma.doctorUnavailable.deleteMany({ where: { doctorId: userId } });
+
     // Revoke all sessions and blacklist current JWT
     await revokeUserSessions(userId);
 

@@ -78,11 +78,15 @@ export function Sidebar({ isCollapsed, onToggleCollapse, isMobileOpen, onCloseMo
         {/* Header */}
         <div className="h-16 flex items-center justify-between px-4 border-b border-white/10 flex-shrink-0">
           <div className="flex items-center gap-3 overflow-hidden">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center flex-shrink-0 shadow-lg shadow-emerald-500/20">
-              <Activity className="text-white w-5 h-5" />
-            </div>
+            
             {!isCollapsed && (
-              <span className="text-lg font-black text-white tracking-tight">ميدكو</span>
+
+              <div className="flex items-center gap-2">
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center flex-shrink-0 shadow-lg shadow-emerald-500/20">
+                <Activity className="text-white w-5 h-5" />
+                            </div>
+                <span className="text-lg font-black text-white tracking-tight">Tt</span>
+              </div>
             )}
           </div>
           <button onClick={onToggleCollapse} className="hidden lg:flex items-center justify-center w-7 h-7 rounded-lg text-white/40 hover:text-white hover:bg-white/10 transition-all">
