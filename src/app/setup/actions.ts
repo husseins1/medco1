@@ -16,7 +16,9 @@ const setupSchema = z.object({
     .string()
     .min(3, "الرابط يجب أن يكون 3 أحرف على الأقل")
     .max(30, "الرابط يجب ألا يتجاوز 30 حرف")
-    .regex(SLUG_REGEX, "الرابط يجب أن يحتوي على أحرف إنجليزية صغيرة، أرقام، وشرطات فقط"),
+    .trim()
+    .toLowerCase()
+    .regex(SLUG_REGEX, "الرابط يجب أن يحتوي على أحرف إنجليزية، أرقام، وشرطات فقط"),
   phone: z.string().min(9, "رقم الهاتف غير صحيح").optional().or(z.literal('')),
   bio: z.string().max(500).optional(),
   logo: z.string().url("رابط الشعار غير صحيح").optional().or(z.literal('')),
@@ -26,6 +28,8 @@ const setupSchema = z.object({
 });
 
 export async function checkSlugAvailability(slug: string) {
+  slug = slug.toLowerCase().trim();
+
   if (!slug || slug.length === 0) {
     return { available: false, error: "الرابط مطلوب" };
   }
@@ -88,7 +92,7 @@ export async function submitSetupWizard(formData: FormData) {
   const firstName = nameParts[0] || doctorName;
   const lastName = nameParts.slice(1).join(" ") || "";
 
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
   const clinicUrl = `${baseUrl}/${slug}`;
 
   const qrCodeDataUrl = await QRCode.toDataURL(clinicUrl, {
@@ -230,6 +234,10 @@ export async function submitSetupWizard(formData: FormData) {
             isSetupDefault: true,
           }
         })
+        const availability = await tx.doctorAvailability.findFirst({
+          where: { doctorId: user.id }
+        });
+        if(!availability) {
 
         await tx.doctorAvailability.create({
           data: {
@@ -239,7 +247,7 @@ export async function submitSetupWizard(formData: FormData) {
             settings: DEFAULT_ADVANCED as unknown as Prisma.InputJsonValue,
           }
         })
-
+      }
         await tx.profile.update({
           where: { id: user.id },
           data: { tenantId: newTenant.id, role: "ADMIN", deletedAt: null }

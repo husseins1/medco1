@@ -8,8 +8,9 @@ import * as z from "zod";
 import { useRouter } from "next/navigation";
 import { LogoUploader } from "@/components/features/setup/LogoUploader";
 import { submitSetupWizard, checkSlugAvailability } from "./actions";
-import { Store, Phone, AlignLeft, MapPin, Building2, ChevronLeft, ChevronRight, Loader2, X, Link, CheckCircle2, XCircle, AlertCircle } from "lucide-react";
+import { Store, Phone, AlignLeft, MapPin, Building2, ChevronLeft, ChevronRight, Loader2, X, Link, CheckCircle2, XCircle, AlertCircle, LogOut } from "lucide-react";
 import { SLUG_REGEX } from "@/lib/slug-utils";
+import { useAuth } from "@/hooks/use-auth";
 
 // Dynamically import map to avoid SSR issues with Leaflet
 const MapLocationPicker = dynamic(
@@ -23,7 +24,9 @@ const setupSchema = z.object({
     .string()
     .min(3, "الرابط يجب أن يكون 3 أحرف على الأقل")
     .max(30, "الرابط يجب ألا يتجاوز 30 حرف")
-    .regex(SLUG_REGEX, "الرابط يجب أن يحتوي على أحرف إنجليزية صغيرة، أرقام، وشرطات فقط"),
+    .trim()
+    .toLowerCase()
+    .regex(SLUG_REGEX, "الرابط يجب أن يحتوي على أحرف إنجليزية، أرقام، وشرطات فقط"),
   phone: z
     .string()
     .regex(/^(\+964|0)?[1-9]\d{9}$/, "رقم الهاتف غير صحيح (مثال: +964 771 123 4567)")
@@ -66,6 +69,7 @@ export default function SetupWizard() {
   });
 
   const router = useRouter();
+  const { logout } = useAuth();
   const slugValue = watch("slug");
 
   useEffect(() => {
@@ -161,7 +165,14 @@ export default function SetupWizard() {
       <div className="w-full max-w-3xl bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
         
         {/* Header / Steps */}
-        <div className="bg-slate-900 text-white p-6 sm:p-8">
+        <div className="bg-slate-900 text-white p-6 sm:p-8 relative">
+          <button
+            onClick={logout}
+            className="absolute top-4 left-4 p-2 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-white/10 transition-all"
+            title="تسجيل الخروج"
+          >
+            <LogOut className="w-5 h-5" />
+          </button>
           <div className="flex items-center gap-3 mb-6">
             <div className="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center shadow-lg">
               <Building2 className="w-6 h-6 text-white" />
@@ -220,7 +231,7 @@ export default function SetupWizard() {
                 <p className="text-xs text-slate-500">هذا هو الرابط الذي سيشاركه المرضى للوصول لعيادتك</p>
                 
                 <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500 transition">
-                  <span className="text-slate-400 text-sm whitespace-nowrap">yourdomain.com/clinic/</span>
+                  <span className="text-slate-400 text-sm whitespace-nowrap"></span>
                   <input
                     {...register("slug")}
                     dir="ltr"
@@ -229,7 +240,7 @@ export default function SetupWizard() {
                   />
                 </div>
                 
-                <p className="text-xs text-slate-400">مثال: yourdomain.com/clinic/dental-care</p>
+                <p className="text-xs text-slate-400">مثال: ali-clinic</p>
                 
                 <div aria-live="polite" className="min-h-[20px]">
                   {slugStatus === "checking" && (
