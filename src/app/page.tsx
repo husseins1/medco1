@@ -20,10 +20,10 @@ const T = {
     nav: { home: "الرئيسية", features: "المميزات", pricing: "الباقات", contact: "تواصل", faq: "أسئلة", login: "دخول", signup: "ابدأ مجاناً" },
     hero: {
       badge: "نظم مخصص للعيادات في العراق",
-      title1: "عيادتك،",
-      title2: "ب نبضٍ رقمي",
-      title3: "جديد",
-      subtitle: "منصة ذكية تُدير عيادتك بالكامل — المرضى، المواعيد، الوصفات، والمال — كل شيء في مكان واحد بسلاسة مطلقة.",
+      title1: "هوسة العيادة بمكان واحد تنحل",
+      title2: "",
+      title3: "",
+      subtitle: "رتب مواعيدك، قلل أخطاء السكرتارية، وخلّ كل معلومات المرضى بمكان واحد.",
       cta1: "ابدأ مجاناً الآن",
       cta2: "شاهد كيف يعمل",
     },
@@ -110,8 +110,9 @@ const T = {
       sub: "نحن هنا للإجابة على جميع استفساراتك — أي وقت.",
       info: [
         { icon: Mail, label: "البريد الإلكتروني", value: "info@digitalclinic.iq" },
-        { icon: Phone, label: "الهاتف", value: "+964 770 281 4484" },
-        { icon: MessageSquare, label: "واتساب", value: "+964 770 281 4484" },
+        { icon: MessageSquare, label: "واتساب", value: "+964 780 696 9277" },
+        { icon: MessageSquare, label: "واتساب", value: "+964 771 063 9740" },
+        { icon: MessageSquare, label: "واتساب", value: "+964 771 091 6019" },
         { icon: MapPin, label: "الموقع", value: "العراق، بغداد" },
       ],
       form: { title: "أرسل رسالة", name: "الاسم الكامل", namePh: "اسمك الكريم", email: "البريد الإلكتروني", emailPh: "example@email.com", phone: "رقم الهاتف", phonePh: "07xxxxxxxxx", subject: "الموضوع", subjectPh: "موضوع الرسالة", clinic: "اسم العيادة (اختياري)", clinicPh: "اسم عيادتك", message: "رسالتك", messagePh: "اكتب رسالتك هنا...", submit: "إرسال الرسالة", success: "تم إرسال رسالتك بنجاح! سيتواصل معك فريقنا خلال 24 ساعة." },
@@ -153,7 +154,7 @@ const T = {
       terms: "الشروط والأحكام",
       privacy: "سياسة الخصوصية",
       copy: "© 2026 العيادة الرقمية. جميع الحقوق محفوظة.",
-      by: "تصميم Dev Code",
+      by: "تصميم Baghdad flow",
     },
     trust: ["آمن وخاص", "سحابي 100%", "متعدد اللغات", "دعم 24/7", "جاهز للبدء الفوري"],
   },
@@ -252,8 +253,9 @@ const T = {
       sub: "We're here to answer all your questions — anytime.",
       info: [
         { icon: Mail, label: "Email", value: "info@digitalclinic.iq" },
-        { icon: Phone, label: "Phone", value: "+964 770 281 4484" },
-        { icon: MessageSquare, label: "WhatsApp", value: "+964 770 281 4484" },
+        { icon: MessageSquare, label: "WhatsApp", value: "+964 780 696 9277" },
+        { icon: MessageSquare, label: "WhatsApp", value: "+964 771 063 9740" },
+        { icon: MessageSquare, label: "WhatsApp", value: "+964 771 091 6019" },
         { icon: MapPin, label: "Location", value: "Baghdad, Iraq" },
       ],
       form: { title: "Send a Message", name: "Full Name", namePh: "Your name", email: "Email Address", emailPh: "example@email.com", phone: "Phone Number", phonePh: "07xxxxxxxxx", subject: "Subject", subjectPh: "Message subject", clinic: "Clinic Name (optional)", clinicPh: "Your clinic name", message: "Your Message", messagePh: "Write your message here...", submit: "Send Message", success: "Your message has been sent! Our team will contact you within 24 hours." },
@@ -295,7 +297,7 @@ const T = {
       terms: "Terms & Conditions",
       privacy: "Privacy Policy",
       copy: "© 2026 Digital Clinic. All rights reserved.",
-      by: "Designed by Dev Code",
+      by: "Designed by Baghdad flow",
     },
     trust: ["Secure & Private", "100% Cloud", "Multilingual", "24/7 Support", "Start Instantly"],
   },
@@ -604,11 +606,15 @@ export default function LandingPage() {
 
                   <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black leading-tight mb-6">
                     <span className="text-white">{t.hero.title1}</span>
-                    <br />
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 via-cyan-300 to-teal-400 gradient-x">
-                      {heroTyped}
-                    </span>
-                    <span className="inline-block w-0.5 h-10 bg-teal-400 ms-1 animate-pulse" />
+                    {t.hero.title2 && (
+                      <>
+                        <br />
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 via-cyan-300 to-teal-400 gradient-x">
+                          {heroTyped}
+                        </span>
+                        <span className="inline-block w-0.5 h-10 bg-teal-400 ms-1 animate-pulse" />
+                      </>
+                    )}
                   </h1>
 
                   <p className="text-lg text-slate-400 leading-relaxed mb-10 max-w-xl">
@@ -1108,17 +1114,17 @@ export default function LandingPage() {
               <div className="grid lg:grid-cols-5 gap-8">
                 <div className="lg:col-span-2">
                   <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 space-y-6">
-                    <h3 className="text-lg font-extrabold text-white">{isRtl ? "معلومات التواصل" : "Contact Information"}</h3>
+                    <h3  className="text-lg font-extrabold text-white">{isRtl ? "معلومات التواصل" : "Contact Information"}</h3>
                     {t.contact.info.map((item, i) => {
                       const Icon = item.icon;
                       return (
-                        <div key={i} className="flex items-start gap-4">
+                        <div  key={i} className="flex items-start gap-4">
                           <div className="w-10 h-10 rounded-xl bg-teal-500/10 flex items-center justify-center flex-shrink-0">
                             <Icon className="w-5 h-5 text-teal-400" />
                           </div>
                           <div>
                             <div className="text-xs text-slate-500">{item.label}</div>
-                            <div className="text-sm font-semibold text-white">{item.value}</div>
+                            <div dir="ltr" className="text-sm font-semibold text-white">{item.value}</div>
                           </div>
                         </div>
                       );
