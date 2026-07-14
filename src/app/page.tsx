@@ -19,7 +19,7 @@ const T = {
     dir: "rtl" as const,
     nav: { home: "الرئيسية", features: "المميزات", pricing: "الباقات", contact: "تواصل", faq: "أسئلة", login: "دخول", signup: "ابدأ مجاناً" },
     hero: {
-      badge: "النظام الأول من نوعه في العراق",
+      badge: "نظم مخصص للعيادات في العراق",
       title1: "عيادتك،",
       title2: "ب نبضٍ رقمي",
       title3: "جديد",
@@ -533,17 +533,15 @@ export default function LandingPage() {
       <nav className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${scrolled ? "bg-[#050a15]/80 backdrop-blur-2xl border-b border-white/5 shadow-xl shadow-black/20" : "bg-transparent"}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-500 to-cyan-400 flex items-center justify-center shadow-lg shadow-teal-500/30 pulse-glow cursor-pointer" onClick={() => router.push("/admin/login")}>
-              <Stethoscope className="w-5 h-5 text-white" />
-            </div>
+            
             <Link href="/" className="flex items-center gap-2 no-underline">
               <div className={isRtl ? "text-right" : "text-left"}>
                 <div className="text-lg font-black text-white leading-tight">
-                  {isRtl ? <>العيادة <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-cyan-300">الرقمية</span></> : <>Digital <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-cyan-300">Clinic</span></>}
+                  
+                  <img src="/ttLogo.svg" alt="Logo" className="w-20" />
+                  
                 </div>
-                <div className="text-[10px] text-slate-500 font-medium">
-                  {isRtl ? "منصة إدارة العيادات" : "Clinic Management Platform"}
-                </div>
+               
               </div>
             </Link>
           </div>
@@ -622,10 +620,10 @@ export default function LandingPage() {
                       <Sparkles className="w-4 h-4" />
                       {t.hero.cta1}
                     </Link>
-                    <button onClick={() => nav("features")} className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full font-bold text-slate-300 border-2 border-white/10 hover:bg-white/5 hover:border-white/20 transition-all bg-white/[0.02] backdrop-blur-sm">
+                    {/* <button onClick={() => nav("features")} className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full font-bold text-slate-300 border-2 border-white/10 hover:bg-white/5 hover:border-white/20 transition-all bg-white/[0.02] backdrop-blur-sm">
                       {t.hero.cta2}
                       <Arrow className="w-4 h-4" />
-                    </button>
+                    </button> */}
                   </div>
 
                   <ECGLine className="w-full h-10 mb-8 opacity-60" />
@@ -648,8 +646,9 @@ export default function LandingPage() {
                   </div>
                 </div>
 
-                <div className="hidden lg:block float-anim">
-                  <DashboardPreview lang={lang} />
+                <div className="hidden lg:block float-anim align-self-baseline">
+                  {/* <DashboardPreview lang={lang} /> */}
+                  <img src="hero-img.webp" alt="hero" className="max-w-1/2 mx-auto" />
                 </div>
               </div>
             </div>

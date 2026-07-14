@@ -185,7 +185,7 @@ export default function SignUpPage() {
           <div className="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center mb-3 shadow-lg shadow-blue-600/30">
             <UserPlus className="w-6 h-6 text-white" />
           </div>
-          <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight mb-2">انضم إلى ميدكو</h1>
+          <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight mb-2">انضم إلى طبيب تري</h1>
           <p className="text-sm text-gray-500 text-center">
             {step === 'email'
               ? 'أنشئ حسابًا لإدارة عيادتك بسهولة.'

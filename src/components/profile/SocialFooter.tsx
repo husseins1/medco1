@@ -59,7 +59,12 @@ export default function SocialFooter({ socialLinks }: SocialFooterProps) {
           {socialLinks.map((link) => {
             const Icon = PLATFORM_ICONS[link.platform] || Globe;
             const label = PLATFORM_LABELS[link.platform] || link.platform;
-            
+            let prefix = "https://";
+            if (link.platform === "WHATSAPP") {
+              prefix = "https://wa.me/";
+            }else if(link.platform === "X"){
+              prefix = "https://x.com/";
+            }
             return (
               <Tooltip key={link.id}>
                 <TooltipTrigger asChild>
@@ -70,12 +75,13 @@ export default function SocialFooter({ socialLinks }: SocialFooterProps) {
                     className="rounded-full size-12 transition-all hover:scale-110 hover:bg-accent hover:text-accent-foreground"
                   >
                     <a
-                      href={link.url}
+                      href={prefix + link.url}
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={label}
                     >
                       <Icon className="size-6" />
+                      
                     </a>
                   </Button>
                 </TooltipTrigger>
