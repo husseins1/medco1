@@ -21,8 +21,15 @@ const almarai = Almarai({
 });
 
 export const metadata: Metadata = {
-  title: "ميدكو | إدارة العيادات وبوابة المندوبين",
-  description: "منصة عربية لإدارة العيادات وربط الأطباء بعروض المندوبين الطبية الخاصة.",
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"
+  ),
+  title: {
+    default: "طبيب تري | Tabibtree",
+    template: "%s | طبيب تري",
+  },
+  description:
+    "نظّم عيادتك كاملة — مواعيد، سجلات مرضى، حسابات، وتذكير واتساب. تطبيق عربي على الجوال. مجاني للبدء.",
 };
 
 export default function RootLayout({
