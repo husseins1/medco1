@@ -1,17 +1,18 @@
 import type { Metadata } from "next";
 
 import { landingContent } from "@/lib/i18n/landing";
-import { SiteHeader } from "@/components/marketing/site-header";
-import { HeroSection } from "@/components/marketing/hero-section";
-import { PainSection } from "@/components/marketing/pain-section";
-import { SolutionSection } from "@/components/marketing/solution-section";
-import { HowItWorksSection } from "@/components/marketing/how-it-works-section";
-import { FeaturesSection } from "@/components/marketing/features-section";
-import { PricingSection } from "@/components/marketing/pricing-section";
-import { WhyTabibtreeSection } from "@/components/marketing/why-tabibtree-section";
-import { FaqSection } from "@/components/marketing/faq-section";
-import { FinalCtaSection } from "@/components/marketing/final-cta-section";
-import { SiteFooter } from "@/components/marketing/site-footer";
+import { LpHeader } from "@/components/landingpage/lp-header";
+import { LpHero } from "@/components/landingpage/lp-hero";
+import { LpMarquee } from "@/components/landingpage/lp-marquee";
+import { LpPain } from "@/components/landingpage/lp-pain";
+import { LpSolution } from "@/components/landingpage/lp-solution";
+import { LpSteps } from "@/components/landingpage/lp-steps";
+import { LpFeatures } from "@/components/landingpage/lp-features";
+import { LpPricing } from "@/components/landingpage/lp-pricing";
+import { LpWhy } from "@/components/landingpage/lp-why";
+import { LpFaq } from "@/components/landingpage/lp-faq";
+import { LpFinalCta } from "@/components/landingpage/lp-final-cta";
+import { LpFooter } from "@/components/landingpage/lp-footer";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
@@ -38,6 +39,12 @@ export const metadata: Metadata = {
     locale: "ar_IQ",
     type: "website",
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "طبيب تري — عيادتك في جيبك",
+    description:
+      "إدارة عيادة كاملة — بالعربي، على جوّالك. مواعيد، سجلات مرضى، حسابات، وتذكير واتساب في تطبيق واحد. مجاني للبدء.",
+  },
 };
 
 const organizationJsonLd = {
@@ -55,7 +62,6 @@ const organizationJsonLd = {
   },
 };
 
-// Built from the same i18n source as the visible FAQ section — never drifts.
 const faqJsonLd = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
@@ -80,24 +86,25 @@ function JsonLd({ data }: { data: Record<string, unknown> }) {
   );
 }
 
-export default function LandingPage() {
+export default function LandingPageV2() {
   return (
     <>
       <JsonLd data={organizationJsonLd} />
       <JsonLd data={faqJsonLd} />
-      <SiteHeader />
-      <main>
-        <HeroSection />
-        <PainSection />
-        <SolutionSection />
-        <HowItWorksSection />
-        <FeaturesSection />
-        <PricingSection />
-        <WhyTabibtreeSection />
-        <FaqSection />
-        <FinalCtaSection />
+      <LpHeader />
+      <main className="font-sans">
+        <LpHero />
+        <LpMarquee />
+        <LpPain />
+        <LpSolution />
+        <LpSteps />
+        <LpFeatures />
+        <LpPricing />
+        <LpWhy />
+        <LpFaq />
+        <LpFinalCta />
       </main>
-      <SiteFooter />
+      <LpFooter />
     </>
   );
 }

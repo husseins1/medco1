@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import { landingContent } from "@/lib/i18n/landing";
 import { Button } from "@/components/ui/Button";
-import { MobileNav } from "@/components/marketing/mobile-nav";
+import { LpMobileNav } from "@/components/landingpage/lp-mobile-nav";
 
 /** Floating pill navbar — sticky, blurred, rounded-full. */
 export function LpHeader() {
@@ -11,7 +11,7 @@ export function LpHeader() {
     <header className="sticky top-3 z-50 mx-auto w-full max-w-5xl px-4 sm:px-6 font-sans">
       <div className="flex h-14 items-center justify-between gap-4 rounded-full border border-border/70 bg-background/80 ps-5 pe-2 shadow-sm backdrop-blur-md">
         <Link
-          href="/landingpage"
+          href="/"
           className="flex shrink-0 items-center"
           aria-label={`${landingContent.brand.name} — الرئيسية`}
         >
@@ -50,7 +50,7 @@ export function LpHeader() {
           </Button>
         </div>
 
-        <MobileNav />
+        <LpMobileNav />
       </div>
     </header>
   );

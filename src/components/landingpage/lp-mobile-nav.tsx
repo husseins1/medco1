@@ -15,7 +15,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/Sheet";
 
-export function MobileNav() {
+export function LpMobileNav() {
   const [open, setOpen] = useState(false);
 
   return (
