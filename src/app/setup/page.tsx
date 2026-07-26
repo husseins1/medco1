@@ -29,6 +29,7 @@ const setupSchema = z.object({
     .regex(SLUG_REGEX, "الرابط يجب أن يحتوي على أحرف إنجليزية، أرقام، وشرطات فقط"),
   phone: z
     .string()
+    .min(6, "رقم الهاتف مطلوب")
     .regex(/^(\+964|0)?[1-9]\d{9}$/, "رقم الهاتف غير صحيح (مثال: +964 771 123 4567)")
     ,
   bio: z.string().max(500, "الوصف يجب ألا يتجاوز 500 حرف").optional(),
@@ -152,9 +153,10 @@ export default function SetupWizard() {
 
   const nextStep = () => {
     if (step === 1) {
-      if (errors.name || errors.slug) return;
+      if (errors.name || errors.slug || errors.phone) return;
       if (!watch("name") || watch("name").length < 2) return;
       if (!watch("slug") || watch("slug").length < 3) return;
+      if (!watch("phone") || watch("phone").length < 1) return;
       if (slugStatus !== "available") return;
       setStep(2);
     }
@@ -274,7 +276,7 @@ export default function SetupWizard() {
 
               <div className="space-y-1.5">
                 <label className="flex items-center gap-2 text-sm font-semibold text-slate-700">
-                  <Phone className="w-4 h-4 text-blue-500" /> رقم الهاتف
+                  <Phone className="w-4 h-4 text-blue-500" /> رقم الهاتف <span className="text-red-500">*</span>
                 </label>
                 <input
                   {...register("phone")}
@@ -302,7 +304,7 @@ export default function SetupWizard() {
                 <button
                   type="button"
                   onClick={nextStep}
-                  disabled={!watch("name") || watch("name").length < 2  || !watch("slug") || watch("slug").length < 3 || slugStatus !== "available" || !watch("phone") || !!errors.phone} // Disable if required fields are not valid
+                  disabled={!watch("name") || watch("name").length < 2  || !watch("slug") || watch("slug").length < 3 || slugStatus !== "available" || !watch("phone") || !!errors.phone || watch("phone").length < 4} // Disable if required fields are not valid
                   className="flex items-center gap-2 px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   التالي <ChevronLeft className="w-4 h-4" />

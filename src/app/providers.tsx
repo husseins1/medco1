@@ -1,12 +1,6 @@
-// Providers wrapper
+// Providers wrapper (used by root layout for any global client providers)
 "use client"
 
-import { QueryProvider } from "@/providers/QueryProvider"
-
 export function Providers({ children }: { children: React.ReactNode }) {
-  return (
-    <QueryProvider>
-      {children}
-    </QueryProvider>
-  )
+  return <>{children}</>
 }

@@ -1,5 +1,6 @@
 import React from "react";
 import DashboardShell from "./DashboardShell";
+import { DashboardQueryProvider } from "./DashboardQueryProvider";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
@@ -62,5 +63,9 @@ export default async function DashboardLayout({ children }: { children: React.Re
     limits: plan.limits,
   };
 
-  return <DashboardShell plan={planInfo}>{children}</DashboardShell>;
+  return (
+    <DashboardQueryProvider>
+      <DashboardShell plan={planInfo}>{children}</DashboardShell>
+    </DashboardQueryProvider>
+  );
 }

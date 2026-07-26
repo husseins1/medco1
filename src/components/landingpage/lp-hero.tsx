@@ -55,7 +55,7 @@ export function LpHero() {
             </span>{" "}
             {hero.titleRest}
           </h1>
-          <p className="mx-auto mt-6 max-w-2xl animate-in fill-mode-both fade-in slide-in-from-bottom-4 text-lg leading-relaxed text-muted-foreground delay-300 duration-700">
+          <p className="mx-auto mt-6 max-w-2xl animate-in slide-in-from-bottom-4 text-lg leading-relaxed text-muted-foreground delay-300 duration-700">
             {hero.subtitle}
           </p>
           <div className="mt-9 lg:justify-start flex animate-in fill-mode-both fade-in slide-in-from-bottom-4 flex-wrap items-center justify-center gap-3 delay-500 duration-700">
@@ -90,15 +90,17 @@ export function LpHero() {
             ))}
           </ul>
         </div>
-        {/* Floating phone mockup (entrance on wrapper, float on inner) */}
-        <div className="mx-auto mt-14 w-full max-w-[240px] animate-in fill-mode-both fade-in zoom-in-95 delay-500 duration-1000 sm:max-w-[480px]">
-          <div className="lp-float relative before:pointer-events-none before:absolute before:inset-0 before:z-10 ">
+        {/* Floating phone mockup — no entrance animation (image is LCP target) */}
+        <div className="mx-auto mt-14 w-full max-w-[240px] sm:max-w-[480px]">
+          <div className="lp-float relative before:pointer-events-none before:absolute before:inset-0 before:z-10">
             <Image
               src="/hero-img.webp"
               alt={hero.imageAlt}
-              width={852}
-              height={1846}
-              priority
+              width={500}
+              height={1084}
+              
+              
+              sizes="(max-width: 640px) 240px, 480px"
               className="h-auto w-full drop-shadow-2xl"
             />
           </div>
