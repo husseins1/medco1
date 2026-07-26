@@ -35,39 +35,97 @@ function CalendarMock({ mock }: { mock: MockStrings }) {
         </span>
         <span className="size-2 rounded-full bg-brand" />
       </div>
-      <div className="grid grid-cols-7 gap-1.5">
-        {calendarPattern.map((day, index) => (
+
+      <div className="mb-1 grid grid-cols-7 gap-1.5">
+        {mock.calendarDayLabels.map((day) => (
           <span
-            key={index}
-            className={cn(
-              "aspect-square rounded-md",
-              day === 2 && "bg-brand shadow-sm",
-              day === 1 && "bg-brand/15",
-              day === 0 && "bg-muted"
-            )}
-          />
+            key={day}
+            className="text-center text-[10px] font-bold text-muted-foreground"
+          >
+            {day.slice(0, 3)}
+          </span>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-7 gap-1.5">
+        {calendarPattern.map((day, index) => {
+          const dayNum = index + 8;
+          return (
+            <span
+              key={index}
+              className={cn(
+                "flex aspect-square flex-col items-center justify-center rounded-md text-[10px] font-bold",
+                day === 2 && "bg-brand text-brand-foreground shadow-sm",
+                day === 1 && "bg-brand/10 text-foreground",
+                day === 0 && "text-muted-foreground"
+              )}
+            >
+              {dayNum.toLocaleString("ar-SA")}
+              {day >= 1 && (
+                <span
+                  className={cn(
+                    "mt-px size-1 rounded-full",
+                    day === 2 ? "bg-brand-foreground" : "bg-brand"
+                  )}
+                />
+              )}
+            </span>
+          );
+        })}
+      </div>
+
+      <div className="mt-3 space-y-1.5">
+        {mock.calendarAppointments.map((apt) => (
+          <div
+            key={apt.time}
+            className="flex items-center gap-2 rounded-md bg-brand/5 px-2.5 py-1.5"
+          >
+            <span className="shrink-0 text-[11px] font-bold text-brand">
+              {apt.time}
+            </span>
+            <span className="truncate text-[11px] text-muted-foreground">
+              {apt.patient}
+            </span>
+          </div>
         ))}
       </div>
     </div>
   );
 }
 
-function RecordsMock() {
+function RecordsMock({ mock }: { mock: MockStrings }) {
   return (
     <div
       aria-hidden="true"
       className="mt-6 space-y-2 rounded-xl border border-border/60 bg-background p-4"
     >
-      <div className="flex items-center gap-2">
-        <span className="size-8 shrink-0 rounded-full bg-brand/15" />
-        <div className="flex-1 space-y-1.5">
-          <div className="h-2 w-2/3 rounded-full bg-muted" />
-          <div className="h-2 w-1/3 rounded-full bg-muted" />
+      {mock.recordsPatients.map((patient, index) => (
+        <div
+          key={patient.name}
+          className={cn(
+            "flex items-start gap-2 rounded-md px-2 py-1.5",
+            index < mock.recordsPatients.length - 1 &&
+              "border-b border-border/40 pb-2"
+          )}
+        >
+          <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-brand/15 text-[10px] font-extrabold text-brand">
+            {patient.initials}
+          </span>
+          <div className="min-w-0 flex-1">
+            <div className="flex items-center justify-between gap-2">
+              <span className="truncate text-xs font-bold text-foreground">
+                {patient.name}
+              </span>
+              <span className="shrink-0 text-[10px] text-muted-foreground">
+                {patient.date}
+              </span>
+            </div>
+            <p className="mt-0.5 truncate text-[11px] text-muted-foreground">
+              {patient.note}
+            </p>
+          </div>
         </div>
-      </div>
-      <div className="h-2 w-full rounded-full bg-muted" />
-      <div className="h-2 w-5/6 rounded-full bg-muted" />
-      <div className="h-2 w-1/2 rounded-full bg-brand/25" />
+      ))}
     </div>
   );
 }
@@ -152,7 +210,7 @@ function FeatureMock({ kind, mock }: { kind: MockKind; mock: MockStrings }) {
     case "calendar":
       return <CalendarMock mock={mock} />;
     case "records":
-      return <RecordsMock />;
+      return <RecordsMock mock={mock} />;
     case "whatsapp":
       return <WhatsappMock mock={mock} />;
     case "finance":

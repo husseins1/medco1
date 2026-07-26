@@ -180,6 +180,39 @@ export const landingContent = {
     // Strings for the decorative pure-CSS product mockups (/landingpage bento).
     mock: {
       calendarCaption: "مواعيد اليوم",
+      calendarDayLabels: [
+        "السبت",
+        "الأحد",
+        "الاثنين",
+        "الثلاثاء",
+        "الأربعاء",
+        "الخميس",
+        "الجمعة",
+      ],
+      calendarAppointments: [
+        { time: "١٠:٠٠ ص", patient: "أحمد خالد" },
+        { time: "١١:٣٠ ص", patient: "سارة محمد" },
+      ],
+      recordsPatients: [
+        {
+          initials: "أ خ",
+          name: "أحمد خالد",
+          date: "١٥ يوليو ٢٠٢٦",
+          note: "فحص دوري — ضغط طبيعي",
+        },
+        {
+          initials: "س م",
+          name: "سارة محمد",
+          date: "١٤ يوليو ٢٠٢٦",
+          note: "التهاب لوز — مضاد حيوي",
+        },
+        {
+          initials: "ع ح",
+          name: "علي حسن",
+          date: "١٢ يوليو ٢٠٢٦",
+          note: "خلع ضرس — متابعة",
+        },
+      ],
       whatsappMessage: "تذكير: موعدك غداً الساعة ٥ مساءً — د. أحمد",
       whatsappStatus: "تم التوصيل",
       financeLabel: "دخل هذا الأسبوع",
