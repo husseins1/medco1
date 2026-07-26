@@ -16,7 +16,7 @@ import {
   Youtube,
   Twitter,
 } from "lucide-react";
-import { SocialPlatform } from "@prisma/client";
+import type { SocialPlatform } from "@prisma/client";
 
 interface SocialLinkItem {
   id: string;

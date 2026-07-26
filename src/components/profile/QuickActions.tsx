@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Separator } from "@/components/ui/Separator";
-import { SocialPlatform } from "@prisma/client";
+import type { SocialPlatform } from "@prisma/client";
 import BookingModal from "./BookingModal";
 
 interface SocialLink {

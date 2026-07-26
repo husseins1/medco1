@@ -29,12 +29,12 @@ export function LpHero() {
 
       <div className="flex flex-col lg:flex-row lg:max-w-5xl items-center mx-auto">
         <div className="mx-auto lg:text-right  max-w-4xl px-4 pt-16 text-center sm:px-6 sm:pt-24">
-          <span className="inline-flex animate-in fill-mode-both fade-in slide-in-from-bottom-2 items-center rounded-full border border-brand/25 bg-brand/5 px-4 py-1.5 text-sm font-semibold text-brand duration-500">
+          <span className="inline-flex items-center rounded-full border border-brand/25 bg-brand/5 px-4 py-1.5 text-sm font-semibold text-brand">
             {hero.badge}
           </span>
           <h1
             id="lp-hero-title"
-            className="mt-6 animate-in fill-mode-both fade-in slide-in-from-bottom-3 text-5xl font-extrabold leading-[1.15] tracking-tight text-balance text-foreground delay-150 duration-700 sm:text-6xl lg:text-7xl"
+            className="mt-6 text-5xl font-extrabold leading-[1.15] tracking-tight text-balance text-foreground sm:text-6xl lg:text-7xl"
           >
             <span className="relative inline-block px-1">
               {hero.titleAccent}
@@ -55,10 +55,10 @@ export function LpHero() {
             </span>{" "}
             {hero.titleRest}
           </h1>
-          <p className="mx-auto mt-6 max-w-2xl animate-in slide-in-from-bottom-4 text-lg leading-relaxed text-muted-foreground delay-300 duration-700">
+          <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
             {hero.subtitle}
           </p>
-          <div className="mt-9 lg:justify-start flex animate-in fill-mode-both fade-in slide-in-from-bottom-4 flex-wrap items-center justify-center gap-3 delay-500 duration-700">
+          <div className="mt-9 lg:justify-start flex flex-wrap items-center justify-center gap-3">
             <Button
               size="lg"
               asChild
@@ -78,7 +78,7 @@ export function LpHero() {
               </a>
             </Button>
           </div>
-          <ul className="mt-8 flex lg:justify-start animate-in fill-mode-both fade-in flex-wrap items-center justify-center gap-x-6 gap-y-2 delay-700 duration-700">
+          <ul className="mt-8 flex lg:justify-start flex-wrap items-center justify-center gap-x-6 gap-y-2">
             {hero.trustBadges.map((badge) => (
               <li
                 key={badge}
@@ -96,10 +96,8 @@ export function LpHero() {
             <Image
               src="/hero-img.webp"
               alt={hero.imageAlt}
-              width={500}
-              height={1084}
-              
-              
+              width={384}
+              height={832}
               sizes="(max-width: 640px) 240px, 480px"
               className="h-auto w-full drop-shadow-2xl"
             />
