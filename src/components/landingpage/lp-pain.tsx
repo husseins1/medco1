@@ -43,11 +43,11 @@ export function LpPain() {
                 </p>
               </blockquote>
               <figcaption
-                dir="ltr"
+                dir="rtl"
                 lang="en"
                 className="mt-5 border-t border-dashed border-border pt-4 text-xs leading-relaxed text-muted-foreground"
               >
-                &ldquo;{item.quote}&rdquo;
+                {item.quote}
               </figcaption>
             </figure>
           ))}

@@ -78,21 +78,21 @@ export const landingContent = {
         title: "ساعات ضائعة كل يوم",
         description: "تدوّر ملفات وتصحّح أخطاء بدل ما تركز على مرضاك",
         quote:
-          "I spend more time sifting through paperwork than treating patients.",
+          "— طبيب عام، عيادة خاصة",
       },
       {
         icon: UserX,
         title: "مرضى يغيبون بدون إنذار وتخسر فلوس",
         description: "مواعيد محجوزة تضيع بسبب النسيان — ولاك متابعة ولاك تذكير",
         quote:
-          "Losing booked patients without notice wastes slots — patient forgetfulness is my chief headache.",
+          "— طبيب أسنان، عيادة خاصة",
       },
       {
         icon: Wallet,
         title: "توصل آخر الشهر وما تعرف إذا ربحت",
         description: "الكاش ينخلط والمصروفات مبهمة — ماكو صورة واضحة عن الأرباح",
         quote:
-          "Cash payments get mixed up; I don't even know if I made money this month.",
+          "— طبيبة عامة، عيادة خاصة",
       },
     ],
     roiCallout: "عيادة صغيرة تخسر 240,000 د.ع شهرياً من غياب المرضى",
