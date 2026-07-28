@@ -34,7 +34,20 @@ export const PLAN_LIMITS: Record<
       financialReports: "none",
       analyticsDashboard: "none",
     },
+    
   },
+  BASIC: {
+  maxDoctors: 1,
+  maxPatients: null,           // unlimited
+  appointmentsPerMonth: null,  // unlimited
+  whatsappPerMonth: 300,
+  features: {
+    patientFiles: true,
+    financialReports: "advanced",
+    analyticsDashboard: "advanced",
+  },
+},
+  
   PROFESSIONAL: {
     maxDoctors: 3,
     maxPatients: null,

@@ -228,10 +228,15 @@ export const landingContent = {
     currency: "د.ع",
     period: "/شهرياً",
     freePrice: "مجاني",
+    yearlyPeriod: "/سنوياً",
+    yearlyPerMonth: "/شهرياً (بالدفع السنوي)",
+    billingToggle: { monthly: "شهري", yearly: "سنوي" },
+    yearlySave: "وفر شهرين",
     plans: [
       {
         name: "البداية",
         price: null,
+        yearlyPrice: null,
         audience: "لأصحاب العيادات الصغيرة",
         highlight: false,
         features: [
@@ -244,8 +249,24 @@ export const landingContent = {
         cta: "ابدأ مجاناً",
       },
       {
+        name: "الأساسية",
+        price: "50,000",
+        yearlyPrice: "500,000",
+        audience: "لأصحاب العيادات المتوسطة",
+        highlight: false,
+        features: [
+          "طبيب واحد",
+          "مرضى ومواعيد غير محدودة",
+          "300 رسالة واتساب شهرياً",
+          "تقارير متقدمة",
+          "دعم واتساب",
+        ],
+        cta: "ابدأ الآن",
+      },
+      {
         name: "الاحترافية",
         price: "75,000",
+        yearlyPrice: "750,000",
         audience: "لأغلب العيادات",
         highlight: true,
         features: [
@@ -260,7 +281,8 @@ export const landingContent = {
       {
         name: "الأعمال",
         price: "200,000",
-        audience: "للعيادات الكبيرة",
+        yearlyPrice: "2,000,000",
+        audience: "للعيادات الكبيرة والمستشفيات",
         highlight: false,
         features: [
           "حتى 10 أطباء",
