@@ -2,6 +2,8 @@ import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 import type { EmailOtpType } from '@supabase/supabase-js'
 import { acceptInvitation } from '@/lib/invite'
+import { sendMetaEvent } from '@/lib/meta/capi'
+import prisma from '@/lib/prisma'
 
 function getRedirectUrl(request: Request, origin: string, path: string): string {
   const forwardedHost = request.headers.get('x-forwarded-host')
@@ -70,6 +72,18 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     const { error } = await supabase.auth.exchangeCodeForSession(code)
     if (!error) {
       await handleAuthSuccess(supabase)
+      if (!invitationId) {
+        const { data: { user } } = await supabase.auth.getUser()
+        if (user?.email) {
+          const profile = await prisma.profile.findUnique({
+            where: { email: user.email },
+            select: { id: true },
+          })
+          if (!profile) {
+            await sendMetaEvent('Lead', { email: user.email })
+          }
+        }
+      }
       return response
     }
     // Pass the error message to the error page
@@ -87,6 +101,18 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     })
     if (!error) {
       await handleAuthSuccess(supabase)
+      if (!invitationId) {
+        const { data: { user } } = await supabase.auth.getUser()
+        if (user?.email) {
+          const profile = await prisma.profile.findUnique({
+            where: { email: user.email },
+            select: { id: true },
+          })
+          if (!profile) {
+            await sendMetaEvent('Lead', { email: user.email })
+          }
+        }
+      }
       return response
     }
   }

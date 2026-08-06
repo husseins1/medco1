@@ -21,6 +21,9 @@ const envSchema = z.object({
   QSTASH_NEXT_SIGNING_KEY: z.string().optional(),
   VERCEL_URL: z.string().optional(),
   QSTASH_URL: z.string().optional(),
+  META_CAPI_ACCESS_TOKEN: z.string().optional(),
+  META_PIXEL_ID: z.string().optional(),
+  META_TEST_EVENT_CODE: z.string().optional(),
 });
 
 export function validateEnv() {

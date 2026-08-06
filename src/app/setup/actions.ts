@@ -9,6 +9,7 @@ import { isReservedSlug } from "@/lib/reserved-slugs";
 import { SLUG_REGEX } from "@/lib/slug-utils";
 import QRCode from "qrcode";
 import { DEFAULT_SCHEDULE, DEFAULT_ADVANCED } from "@/components/features/availability/constants";
+import { sendMetaEvent } from "@/lib/meta/capi";
 
 const setupSchema = z.object({
   name: z.string().min(2, "اسم العيادة يجب أن يحتوي على حرفين الأقل"),
@@ -275,6 +276,13 @@ export async function submitSetupWizard(formData: FormData) {
   if (alreadySetup) {
     redirect("/dashboard");
   }
+
+  await sendMetaEvent("CompleteRegistration", {
+    email: user.email,
+    firstName,
+    lastName,
+    phone,
+  });
 
   // Refresh session so the JWT picks up the new user_role and tenant_id claims
   // injected by the Custom Access Token Hook

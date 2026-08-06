@@ -3,6 +3,8 @@
 import { createClient } from '@/utils/supabase/server'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
+import { sendMetaEvent } from '@/lib/meta/capi'
+import prisma from '@/lib/prisma'
 
 const emailSchema = z.object({
   email: z.string().email({ message: "البريد الإلكتروني غير صالح" }),
@@ -59,6 +61,15 @@ export async function verifySignupOtp(formData: FormData) {
   }
 
   revalidatePath('/', 'layout')
+
+  const profile = await prisma.profile.findUnique({
+    where: { email: validation.data.email },
+    select: { id: true },
+  })
+
+  if (!profile) {
+    await sendMetaEvent('Lead', { email: validation.data.email })
+  }
 
   return { success: true }
 }

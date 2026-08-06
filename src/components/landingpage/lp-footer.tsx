@@ -2,6 +2,7 @@ import Image from "next/image";
 import { MessageCircle } from "lucide-react";
 
 import { landingContent } from "@/lib/i18n/landing";
+import { MetaContactLink } from "@/components/meta/meta-contact-link";
 
 /** Minimal centered footer — logo, tagline, quick links, copyright. */
 export function LpFooter() {
@@ -33,7 +34,7 @@ export function LpFooter() {
               {item.label}
             </a>
           ))}
-          <a
+          <MetaContactLink
             href={contact.whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
@@ -41,7 +42,7 @@ export function LpFooter() {
           >
             <MessageCircle className="size-4" aria-hidden="true" />
             {footer.whatsappLabel}
-          </a>
+          </MetaContactLink>
         </nav>
         <p className="text-xs text-muted-foreground">{footer.copyright}</p>
       </div>
