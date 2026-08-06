@@ -13,7 +13,8 @@ import { LpWhy } from "@/components/landingpage/lp-why";
 import { LpFaq } from "@/components/landingpage/lp-faq";
 import { LpFinalCta } from "@/components/landingpage/lp-final-cta";
 import { LpFooter } from "@/components/landingpage/lp-footer";
-import { MetaLandingView } from "@/components/meta/meta-pixel";
+import { MetaLandingView, MetaPixel } from "@/components/meta/meta-pixel";
+
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
@@ -92,6 +93,7 @@ export default function LandingPageV2() {
     <>
       <JsonLd data={organizationJsonLd} />
       <JsonLd data={faqJsonLd} />
+      <MetaPixel pixelId={process.env.META_PIXEL_ID} />
       <MetaLandingView />
       <LpHeader />
       <main className="font-sans">

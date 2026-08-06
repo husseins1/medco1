@@ -3,7 +3,6 @@ import { Geist, Geist_Mono, Almarai } from "next/font/google";
 import { Providers } from "./providers";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/next"
-import { MetaPixel } from "@/components/meta/meta-pixel";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -68,7 +67,6 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${almarai.variable} antialiased`}
       >
         <Analytics />
-        <MetaPixel pixelId={process.env.META_PIXEL_ID} />
         <Providers>
           {children}
         </Providers>
