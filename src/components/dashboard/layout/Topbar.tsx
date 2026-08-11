@@ -1,9 +1,10 @@
 "use client";
 
 import React from "react";
-import { Search, Bell, Menu, User, LogOut } from "lucide-react";
+import { Search, Bell, Menu, User, LogOut, HelpCircle } from "lucide-react";
 import { Button } from "../../ui/Button";
 import { useAuth } from "@/hooks/use-auth";
+import Link from "next/link";
 
 interface TopbarProps {
   onOpenMobileSidebar: () => void;
@@ -27,7 +28,14 @@ export function Topbar({ onOpenMobileSidebar }: TopbarProps) {
       <div className="lg:hidden flex-1" />
 
       <div className="flex items-center gap-1 sm:gap-2 mr-auto">
-        
+        <Link
+          href="/help"
+          className="p-2.5 rounded-xl text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-all group"
+          aria-label="مركز المساعدة"
+          title="مركز المساعدة"
+        >
+          <HelpCircle className="w-4.5 h-4.5 group-hover:scale-110 transition-transform" />
+        </Link>
 
         <button
           onClick={logout}

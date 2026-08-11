@@ -16,7 +16,8 @@ import {
   ShieldCheck,
   UserPlus,
   User,
-  BarChart3
+  BarChart3,
+  HelpCircle
 } from "lucide-react";
 import { NavGroup } from "../types/dashboard";
 
@@ -79,6 +80,12 @@ export const navigationGroups: NavGroup[] = [
       { title: "حسابي", href: "/dashboard/account", icon: User },
       
       { title: "الباقة والاستخدام", href: "/dashboard/settings/plans", icon: BarChart3 },
+    ],
+  },
+  {
+    label: "الدعم",
+    items: [
+      { title: "مركز المساعدة", href: "/help", icon: HelpCircle },
     ],
   },
 ];
