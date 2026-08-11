@@ -51,7 +51,7 @@ export function Sidebar({ isCollapsed, onToggleCollapse, isMobileOpen, onCloseMo
     const baseUrl = `/dashboard/patients/${patientId}`;
     const links = [
       { title: "تفاصيل المريض", href: `${baseUrl}?tab=overview`, icon: User },
-      { title: "الوصفات", href: `${baseUrl}?tab=visits`, icon: Stethoscope },
+      { title: "ملاحظات الزيارة", href: `${baseUrl}?tab=visits`, icon: Stethoscope },
       { title: "الملفات", href: `${baseUrl}?tab=files`, icon: Files },
       { title: "المواعيد", href: `${baseUrl}?tab=appointments`, icon: Calendar },
       { title: "الحالات", href: `${baseUrl}?tab=cases`, icon: Briefcase },

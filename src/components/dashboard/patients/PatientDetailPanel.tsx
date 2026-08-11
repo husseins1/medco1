@@ -1,11 +1,13 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Patient } from "../../../hooks/use-patients";
 import {
   X, Phone, Mail, CalendarDays, MapPin, Stethoscope, ChevronLeft, Pencil, Trash2,
   Heart, User, CalendarClock, Hash, Clock, MessageSquareText,
+  Files, Calendar, Briefcase, CreditCard, Bell,
 } from "lucide-react";
 import { VisitNoteTab } from "./tabs/VisitNoteTab";
 import { PaymentsTab } from "./tabs/PaymentsTab";
@@ -14,6 +16,9 @@ import { AppointmentsTab } from "./tabs/AppointmentsTab";
 import { FilesTab } from "./tabs/FilesTab";
 import { RemindersTab } from "./tabs/RemindersTab";
 import { PlanGate } from "@/components/ui/PlanGate";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/Select";
+import { usePlan } from "@/lib/plans/plan-context";
+import { cn } from "@/lib/utils";
 
 interface PatientDetailPanelProps {
   patient: Patient;
@@ -85,6 +90,16 @@ function sourceConfig(source: string | null | undefined) {
   }
 }
 
+const PATIENT_TABS = [
+  { key: "overview", title: "تفاصيل المريض", icon: User },
+  { key: "visits", title: "ملاحظات الزيارة", icon: Stethoscope },
+  { key: "files", title: "الملفات", icon: Files },
+  { key: "appointments", title: "المواعيد", icon: Calendar },
+  { key: "cases", title: "الحالات", icon: Briefcase },
+  { key: "payments", title: "المدفوعات", icon: CreditCard },
+  { key: "reminders", title: "التذكيرات", icon: Bell },
+];
+
 export function PatientDetailPanel({
   patient,
   onClose,
@@ -94,10 +109,17 @@ export function PatientDetailPanel({
 }: PatientDetailPanelProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const plan = usePlan();
   const activeTab = searchParams.get("tab") || "overview";
   const age = calcAge(patient.dateOfBirth);
   const cIdx = getColorIndex(patient.id);
   const src = sourceConfig(patient.source);
+
+  const tabs = plan && !plan.limits.features.patientFiles
+    ? PATIENT_TABS.filter((t) => t.key !== "files")
+    : PATIENT_TABS;
+
+  const ActiveTabIcon = tabs.find((t) => t.key === activeTab)?.icon ?? User;
 
   return (
     <div className={`flex flex-col bg-gradient-to-br from-slate-50 to-white h-full ${fullPage ? "w-full" : "w-full border-r border-slate-100 shadow-xl"}`}>
@@ -232,6 +254,56 @@ export function PatientDetailPanel({
               {formatDate(patient.createdAt)}
             </span>
           </div>
+        </div>
+      </div>
+
+      {/* ═══════ TAB NAVIGATION ═══════ */}
+      <div className="px-5 pt-4 shrink-0">
+        {/* Small screens: dropdown */}
+        <div className="md:hidden">
+          <Select
+            value={activeTab}
+            onValueChange={(v) => router.push(`/dashboard/patients/${patient.id}?tab=${v}`)}
+          >
+            <SelectTrigger className="w-full">
+              <ActiveTabIcon className="size-4 text-emerald-600" />
+              <SelectValue placeholder="اختر قسماً" />
+            </SelectTrigger>
+            <SelectContent>
+              {tabs.map((tab) => {
+                const Icon = tab.icon;
+                return (
+                  <SelectItem key={tab.key} value={tab.key}>
+                    <Icon className="size-4" />
+                    {tab.title}
+                  </SelectItem>
+                );
+              })}
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* md and up: horizontal strip */}
+        <div className="hidden md:flex items-center gap-1  custom-scrollbar border-b border-slate-100">
+          {tabs.map((tab) => {
+            const Icon = tab.icon;
+            const active = activeTab === tab.key;
+            return (
+              <Link
+                key={tab.key}
+                href={`/dashboard/patients/${patient.id}?tab=${tab.key}`}
+                className={cn(
+                  "flex items-center gap-1.5 px-3 py-2 text-sm font-bold whitespace-nowrap rounded-lg transition-colors shrink-0 -mb-px border-b-2",
+                  active
+                    ? "text-emerald-700 bg-emerald-50 border-emerald-600"
+                    : "text-slate-500 border-transparent hover:text-emerald-900 hover:bg-emerald-50",
+                )}
+              >
+                <Icon className="size-4" />
+                {tab.title}
+              </Link>
+            );
+          })}
         </div>
       </div>
 
