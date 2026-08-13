@@ -17,6 +17,8 @@ export type HelpTopic = {
   slug: string;
   title: string;
   description: string;
+  seoTitle?: string;
+  seoDescription?: string;
   icon: LucideIcon;
   featureHref?: string;
   sections: HelpSection[];

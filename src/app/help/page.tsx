@@ -1,11 +1,77 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { ArrowLeft, Sparkles } from "lucide-react";
-import { helpCategories } from "@/lib/help/topics";
+import { helpCategories, helpTopics } from "@/lib/help/topics";
 import { Card, CardContent } from "@/components/ui/Card";
+import { JsonLd } from "@/components/JsonLd";
+
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+
+export const metadata: Metadata = {
+  title: {
+    absolute: "مركز المساعدة — شروحات ودليل استخدام طبيب تري",
+  },
+  description:
+    "مركز مساعدة طبيب تري بالعربية: شروحات خطوة بخطوة لجدولة المواعيد، إدارة المرضى والملفات الطبية، الفواتير والمدفوعات، تذكيرات واتساب، والإحصاءات — دليلك الكامل.",
+  alternates: {
+    canonical: "/help",
+  },
+  openGraph: {
+    title: "مركز المساعدة — شروحات طبيب تري",
+    description:
+      "شروحات عربية خطوة بخطوة لكل أقسام طبيب تري: المواعيد، المرضى، الفواتير، التذكيرات، والإحصاءات.",
+    url: "/help",
+    siteName: "طبيب تري — Tabibtree",
+    locale: "ar_IQ",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "مركز المساعدة — شروحات طبيب تري",
+    description:
+      "شروحات عربية خطوة بخطوة لكل أقسام طبيب تري: المواعيد، المرضى، الفواتير، التذكيرات، والإحصاءات.",
+  },
+};
+
+const breadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: "الرئيسية",
+      item: siteUrl,
+    },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "مركز المساعدة",
+      item: `${siteUrl}/help`,
+    },
+  ],
+};
+
+const collectionJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: "مركز المساعدة — طبيب تري",
+  description:
+    "شروحات عربية خطوة بخطوة لكل أقسام طبيب تري: المواعيد، المرضى، الفواتير، التذكيرات، والإحصاءات.",
+  url: `${siteUrl}/help`,
+  hasPart: helpTopics.map((topic) => ({
+    "@type": "WebPage",
+    name: topic.title,
+    url: `${siteUrl}/help/${topic.slug}`,
+    description: topic.seoDescription ?? topic.description,
+  })),
+};
 
 export default function HelpIndexPage() {
   return (
     <div className="space-y-10">
+      <JsonLd data={breadcrumbJsonLd} />
+      <JsonLd data={collectionJsonLd} />
       {/* Hero */}
       <section className="space-y-4">
         <div className="flex items-start gap-4">

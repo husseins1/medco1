@@ -5,7 +5,7 @@ import {
   AvailabilityMock,
   WaitlistMock,
 } from "./schedule";
-import { PatientsMock, ServicesMock, RemindersMock } from "./patients";
+import { PatientsMock, ServicesMock, RemindersMock, PatientProfileMock } from "./patients";
 import { InvoicesMock, AnalyticsMock } from "./finance";
 import {
   ProfileMock,
@@ -21,6 +21,7 @@ const mocks: Record<string, ComponentType> = {
   availability: AvailabilityMock,
   waitlist: WaitlistMock,
   patients: PatientsMock,
+  "patient-profile": PatientProfileMock,
   services: ServicesMock,
   reminders: RemindersMock,
   invoices: InvoicesMock,

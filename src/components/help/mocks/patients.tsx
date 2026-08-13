@@ -136,3 +136,80 @@ export function RemindersMock() {
     </div>
   );
 }
+
+/** Patient profile mock — hero header, stats strip and tabbed content. */
+export function PatientProfileMock() {
+  const tabs = [
+    { label: "تفاصيل", active: true },
+    { label: "زيارات", active: false },
+    { label: "حالات", active: false },
+    { label: "مواعيد", active: false },
+    { label: "مدفوعات", active: false },
+  ];
+
+  return (
+    <div
+      aria-hidden="true"
+      className="mx-auto w-full max-w-[400px] rounded-xl border border-border/60 bg-background shadow-sm"
+    >
+      <div className="rounded-t-xl bg-slate-900 px-4 py-3.5">
+        <div className="flex items-center gap-3">
+          <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-brand text-[13px] font-extrabold text-brand-foreground">
+            أ
+          </span>
+          <div className="min-w-0 flex-1 text-start">
+            <p className="truncate text-[12px] font-bold text-white">أحمد علي</p>
+            <div className="mt-1 flex items-center gap-2">
+              <span className="rounded-full bg-amber-400/15 px-2 py-0.5 text-[8px] font-bold text-amber-300">
+                توصية
+              </span>
+              <span className="text-[8px] text-white/60">٣٤ سنة · ذكر</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-3 divide-x divide-border/60 border-b border-border/60">
+        {[
+          { value: "٣", label: "الحالات" },
+          { value: "٣٤", label: "العمر" },
+          { value: "ذكر", label: "الجنس" },
+        ].map((stat) => (
+          <div key={stat.label} className="px-2 py-2 text-center">
+            <p className="text-[11px] font-extrabold text-foreground">{stat.value}</p>
+            <p className="text-[8px] text-muted-foreground">{stat.label}</p>
+          </div>
+        ))}
+      </div>
+
+      <div className="flex items-center gap-1 overflow-hidden border-b border-border/60 px-3 py-2">
+        {tabs.map((tab) => (
+          <span
+            key={tab.label}
+            className={cn(
+              "shrink-0 rounded-md px-2 py-1 text-[8px] font-bold",
+              tab.active
+                ? "bg-brand text-brand-foreground"
+                : "text-muted-foreground"
+            )}
+          >
+            {tab.label}
+          </span>
+        ))}
+      </div>
+
+      <div className="space-y-1.5 p-3">
+        <div className="flex items-center justify-between rounded-lg bg-muted/40 px-2.5 py-1.5">
+          <span className="text-[9px] text-muted-foreground">زيارة ١٢ يونيو — كشف</span>
+          <span className="text-[9px] font-bold text-brand">عرض</span>
+        </div>
+        <div className="flex items-center justify-between rounded-lg bg-muted/40 px-2.5 py-1.5">
+          <span className="text-[9px] text-muted-foreground">دفعة ٢٥٠٠٠ د.ع</span>
+          <span className="rounded-full bg-emerald-500/10 px-1.5 py-0.5 text-[8px] font-bold text-emerald-600">
+            مدفوع
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
