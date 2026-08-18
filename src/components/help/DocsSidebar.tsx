@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { helpCategories } from "@/lib/help/topics";
 import { cn } from "@/lib/utils";
 
@@ -7,6 +10,9 @@ interface DocsSidebarProps {
 }
 
 export function DocsSidebar({ activeSlug }: DocsSidebarProps) {
+  const pathname = usePathname();
+  const currentSlug = activeSlug ?? pathname.split("/")[2];
+
   return (
     <nav aria-label="أقسام المساعدة" className="space-y-6">
       {helpCategories.map((category) => (
@@ -16,7 +22,7 @@ export function DocsSidebar({ activeSlug }: DocsSidebarProps) {
           </h4>
           <div className="flex flex-col gap-0.5">
             {category.topics.map((topic) => {
-              const isActive = topic.slug === activeSlug;
+              const isActive = topic.slug === currentSlug;
               const Icon = topic.icon;
               return (
                 <Link
@@ -25,12 +31,12 @@ export function DocsSidebar({ activeSlug }: DocsSidebarProps) {
                   className={cn(
                     "flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-colors",
                     isActive
-                      ? "bg-primary/10 text-primary font-semibold"
+                      ? " border-brand bg-brand/10 text-brand font-semibold"
                       : "text-muted-foreground hover:bg-muted hover:text-foreground"
                   )}
                   aria-current={isActive ? "page" : undefined}
                 >
-                  <Icon className="size-4 shrink-0" />
+                  <Icon className="size-4 shrink-0 " />
                   <span className="truncate">{topic.title}</span>
                 </Link>
               );

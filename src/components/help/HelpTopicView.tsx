@@ -1,5 +1,14 @@
 import Link from "next/link";
-import { ArrowRight, ArrowLeft, Check, Info, TriangleAlert, CircleCheck } from "lucide-react";
+import {
+  ArrowRight,
+  ArrowLeft,
+  Check,
+  Info,
+  TriangleAlert,
+  CircleCheck,
+  Youtube,
+  ExternalLink,
+} from "lucide-react";
 import type { HelpTopic } from "@/lib/help/types";
 import { getHelpTopic, helpTopics } from "@/lib/help/topics";
 import { TopicMock } from "@/components/help/mocks";
@@ -42,7 +51,7 @@ export function HelpTopicView({ topic }: HelpTopicViewProps) {
         </nav>
 
         <div className="flex items-start gap-4">
-          <div className="size-11 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
+          <div className="size-11 rounded-xl bg-brand/10 text-brand flex items-center justify-center shrink-0">
             <Icon className="size-5" />
           </div>
           <div className="space-y-1.5">
@@ -125,7 +134,7 @@ export function HelpTopicView({ topic }: HelpTopicViewProps) {
                       key={itemIdx}
                       className="flex items-start gap-2.5 text-muted-foreground leading-relaxed"
                     >
-                      <Check className="size-4 shrink-0 text-primary mt-0.5" />
+                      <Check className="size-4 shrink-0 text-brand mt-0.5" />
                       <span>{item}</span>
                     </li>
                   ))}
@@ -157,12 +166,36 @@ export function HelpTopicView({ topic }: HelpTopicViewProps) {
         })}
       </div>
 
+      {/* Video link */}
+      {topic.youtubeUrl && (
+        <div className="flex flex-col gap-3 rounded-xl border border-border bg-muted/40 p-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-3">
+            <Youtube className="size-5 shrink-0 text-brand" aria-hidden="true" />
+            <div>
+              <p className="font-semibold text-foreground">شرح بالفيديو</p>
+              <p className="text-sm text-muted-foreground">
+                شاهد شرح استخدام هذه الصفحة خطوة بخطوة.
+              </p>
+            </div>
+          </div>
+          <a
+            href={topic.youtubeUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 font-semibold text-brand hover:underline"
+          >
+            مشاهدة الفيديو
+            <ExternalLink className="size-4" aria-hidden="true" />
+          </a>
+        </div>
+      )}
+
       {/* Feature link */}
       {topic.featureHref && (
         <div className="rounded-xl border border-border bg-muted/40 p-4">
           <Link
             href={topic.featureHref}
-            className="inline-flex items-center gap-2 font-semibold text-primary hover:underline"
+            className="inline-flex items-center gap-2 font-semibold text-brand hover:underline"
           >
             الانتقال إلى {topic.title}
             <ArrowLeft className="size-4" aria-hidden="true" />

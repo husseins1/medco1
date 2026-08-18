@@ -21,6 +21,7 @@ export type HelpTopic = {
   seoDescription?: string;
   icon: LucideIcon;
   featureHref?: string;
+  youtubeUrl?: string;
   sections: HelpSection[];
   related?: string[];
 };

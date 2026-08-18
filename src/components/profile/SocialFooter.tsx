@@ -59,7 +59,7 @@ export default function SocialFooter({ socialLinks }: SocialFooterProps) {
           {socialLinks.map((link) => {
             const Icon = PLATFORM_ICONS[link.platform] || Globe;
             const label = PLATFORM_LABELS[link.platform] || link.platform;
-            let prefix = "https://";
+            let prefix = "";
             if (link.platform === "WHATSAPP") {
               prefix = "https://wa.me/";
             }else if(link.platform === "X"){

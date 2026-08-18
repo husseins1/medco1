@@ -75,7 +75,7 @@ export default function HelpIndexPage() {
       {/* Hero */}
       <section className="space-y-4">
         <div className="flex items-start gap-4">
-          <div className="size-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
+          <div className="size-12 rounded-2xl bg-brand/10 text-brand flex items-center justify-center shrink-0">
             <Sparkles className="size-6" />
           </div>
           <div className="space-y-2">
@@ -107,7 +107,7 @@ export default function HelpIndexPage() {
                   >
                     <CardContent className="flex flex-1 flex-col gap-3 p-0">
                       <div className="flex items-start justify-between gap-3">
-                        <div className="size-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                        <div className="size-10 rounded-xl bg-brand/10 text-brand flex items-center justify-center shrink-0">
                           <Icon className="size-5" />
                         </div>
                         <ArrowLeft
@@ -133,7 +133,7 @@ export default function HelpIndexPage() {
       ))}
 
       {/* Getting started */}
-      <section className="rounded-2xl border border-primary/20 bg-primary/5 p-6 sm:p-8">
+       <section className="rounded-2xl border border-brand/20 bg-brand/5 p-6 sm:p-8">
         <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
           <div className="space-y-1.5">
             <h2 className="text-xl font-bold text-foreground">
@@ -153,7 +153,7 @@ export default function HelpIndexPage() {
             </Link>
             <Link
               href="/signup"
-              className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+              className="rounded-lg bg-brand px-4 py-2 text-sm font-semibold text-brand-foreground transition-colors hover:bg-brand/90"
             >
               إنشاء حساب مجاني
             </Link>

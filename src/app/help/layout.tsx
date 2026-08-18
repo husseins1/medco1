@@ -36,9 +36,9 @@ export default function HelpLayout({ children }: HelpLayoutProps) {
             <span className="hidden h-6 w-px bg-border sm:block" />
             <Link
               href="/help"
-              className="hidden items-center gap-1.5 text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors sm:flex"
+              className="hidden items-center gap-1.5 text-sm font-semibold text-brand hover:text-brand/80 transition-colors sm:flex"
             >
-              <HelpCircle className="size-4" />
+              <HelpCircle className="size-4" aria-hidden="true" />
               مركز المساعدة
             </Link>
           </div>
@@ -58,9 +58,9 @@ export default function HelpLayout({ children }: HelpLayoutProps) {
         <div className="flex flex-col gap-8 lg:flex-row">
           {/* Mobile topics toggle */}
           <details className="lg:hidden group">
-            <summary className="flex cursor-pointer list-none items-center justify-between rounded-xl border border-border bg-muted/40 px-4 py-3 text-sm font-semibold">
+            <summary className="flex cursor-pointer list-none items-center justify-between rounded-xl border border-brand/20 bg-brand/5 px-4 py-3 text-sm font-semibold text-brand">
               <span>أقسام المساعدة</span>
-              <Menu className="size-4 text-muted-foreground" aria-hidden="true" />
+              <Menu className="size-4" aria-hidden="true" />
             </summary>
             <div className="mt-3 rounded-xl border border-border bg-background p-3">
               <DocsSidebar />

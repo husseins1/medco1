@@ -31,6 +31,7 @@ export const helpCategories: HelpCategory[] = [
           "تعلّم استخدام لوحة تحكم طبيب تري: راجع ملخص اليوم، البطاقات الإحصائية للمرضى والمواعيد والإيرادات، جدول اليوم، المواعيد القادمة، ورسم أداء عيادتك خلال آخر ٦ أشهر.",
         icon: Home,
         featureHref: "/dashboard",
+        youtubeUrl: "",
         related: ["calendar", "patients"],
         sections: [
           {
@@ -86,6 +87,7 @@ export const helpCategories: HelpCategory[] = [
           "تعلّم تحديث الملف التعريفي لعيادتك في طبيب تري: رفع الشعار، إدخال الاسم والتخصص والنبذة، مشاركة رابط الحجز ورمز QR، تحديد الموقع على الخريطة، وإضافة روابط التواصل.",
         icon: Globe,
         featureHref: "/dashboard/profile",
+        youtubeUrl: "https://www.youtube.com/watch?v=mscEpme_e_4&list=PLdblRkSFK-1c",
         related: ["services", "availability"],
         sections: [
           {
@@ -136,6 +138,7 @@ export const helpCategories: HelpCategory[] = [
           "تعلّم إدارة الخدمات الطبية في طبيب تري: إضافة خدمة جديدة بالاسم والوصف، تحديد المدة والسعر، اختيار اللون وحالة التفعيل، مع شرح حذف الخدمات وإيقاف تفعيلها.",
         icon: Star,
         featureHref: "/dashboard/services",
+        youtubeUrl: "https://www.youtube.com/watch?v=fOHmkC2nRz8&list=PLdblRkSFK-1c&index=2",
         related: ["calendar", "profile"],
         sections: [
           {
@@ -191,6 +194,7 @@ export const helpCategories: HelpCategory[] = [
           "تعلّم جدولة المواعيد في تقويم طبيب تري: حجز موعد جديد بالخدمة والطبيب والمريض، تسجيل الحضور والدفع، إعادة الجدولة والإلغاء، والسحب والإفلات بخطوات واضحة.",
         icon: CalendarDays,
         featureHref: "/dashboard/calendar",
+        youtubeUrl: "https://www.youtube.com/watch?v=UEKBt8Mmf1Y&list=PLdblRkSFK-1c&index=3",
         related: ["availability", "waitlist", "patients"],
         sections: [
           {
@@ -281,6 +285,7 @@ export const helpCategories: HelpCategory[] = [
           "تعلّم ضبط أوقات العمل في طبيب تري: تحديد ساعات العمل الأسبوعية لكل طبيب، تفعيل أيام العمل وإضافة الفترات، وضبط إعدادات الحجز عبر الإنترنت بوقت استعداد وحدود يومية.",
         icon: Clock,
         featureHref: "/dashboard/availability",
+        youtubeUrl: "",
         related: ["calendar", "waitlist"],
         sections: [
           {
@@ -345,6 +350,7 @@ export const helpCategories: HelpCategory[] = [
           "تعلّم استخدام قائمة الانتظار في طبيب تري: تحريك بطاقات المرضى بين أعمدة الحجز والانتظار وقيد التنفيذ والمكتمل، متابعة الحالات، وإضافة موعد من رأس أي عمود.",
         icon: Users,
         featureHref: "/dashboard/waitlist",
+        youtubeUrl: "",
         related: ["calendar", "patients"],
         sections: [
           {
@@ -400,6 +406,7 @@ export const helpCategories: HelpCategory[] = [
           "تعلّم إدارة قائمة المرضى في طبيب تري: البحث بالاسم أو الهاتف أو المعرّف، تصفية النتائج حسب مصدر المريض، إنشاء ملف مريض جديد، ومتابعة مواعيد اليوم للأطباء والمشرفين.",
         icon: UsersRound,
         featureHref: "/dashboard/patients",
+        youtubeUrl: "https://www.youtube.com/watch?v=9rrNGj9tquM&list=PLdblRkSFK-1c&index=4",
         related: ["calendar", "reminders", "patient-profile"],
         sections: [
           {
@@ -452,6 +459,7 @@ export const helpCategories: HelpCategory[] = [
       },
       {
         slug: "patient-profile",
+        youtubeUrl: "https://www.youtube.com/watch?v=9rrNGj9tquM&list=PLdblRkSFK-1c&index=4",
         title: "ملف المريض",
         description:
           "الصفحة الكاملة لكل مريض: بياناته الشخصية، ملاحظات الزيارة، الحالات، الملفات، المواعيد، المدفوعات، والتذكيرات في تبويبات منظمة.",
@@ -540,6 +548,7 @@ export const helpCategories: HelpCategory[] = [
           "تعلّم تفعيل تذكيرات واتساب في طبيب تري: تأكيد الحجز، التذكير قبل الموعد، إعادة الجدولة والإلغاء، ضبط وقت التذكير، ومتابعة سجل الإرسال والتصفية بالحالة.",
         icon: MessageSquare,
         featureHref: "/dashboard/reminders",
+        youtubeUrl: "https://www.youtube.com/watch?v=Vl9F_8Roob8&list=PLdblRkSFK-1c&index=6",
         related: ["calendar", "patients", "plans"],
         sections: [
           {
@@ -591,6 +600,7 @@ export const helpCategories: HelpCategory[] = [
           "تعلّم إدارة دخل عيادتك ومصروفاتها في طبيب تري: تسجيل معاملات الدخل والمصروفات، إدارة المصروفات المتكررة، مقارنة الشهور، واختيار الفترة وتصدير البيانات إلى CSV.",
         icon: CreditCard,
         featureHref: "/dashboard/invoices",
+        youtubeUrl: "https://www.youtube.com/watch?v=YPRgsoeb2eI&list=PLdblRkSFK-1c&index=7",
         related: ["patients", "plans"],
         sections: [
           {
@@ -641,6 +651,7 @@ export const helpCategories: HelpCategory[] = [
           "تعلّم قراءة الإحصاءات في طبيب تري: اتجاهات المواعيد، أداء الأطباء، توزيع المرضى حسب الجنس والعمر، الخدمات الأكثر حجزاً، وأيام الأسبوع الأكثر ازدحاماً مع تصدير CSV.",
         icon: PieChart,
         featureHref: "/dashboard/analytics",
+        youtubeUrl: "https://www.youtube.com/watch?v=YPRgsoeb2eI&list=PLdblRkSFK-1c&index=7",
         related: ["invoices", "patients"],
         sections: [
           {
@@ -692,6 +703,7 @@ export const helpCategories: HelpCategory[] = [
           "تعلّم دعوة أعضاء جدد إلى عيادتك في طبيب تري: إرسال دعوة بطبيب أو موظف استقبال بالبريد، متابعة حالة الدعوات، وإلغاء المعلقة قبل انتهاء صلاحيتها.",
         icon: UserPlus,
         featureHref: "/dashboard/invite",
+        youtubeUrl: "https://www.youtube.com/watch?v=QosndX_3DUg&list=PLdblRkSFK-1c&index=8",
         related: ["users"],
         sections: [
           {
@@ -748,6 +760,7 @@ export const helpCategories: HelpCategory[] = [
           "تعلّم إدارة أعضاء العيادة في طبيب تري: عرض قائمة المستخدمين، تغيير الأدوار بين مسؤول وطبيب وموظف استقبال، حذف الأعضاء، ودعوة مستخدمين جدد بخطوات واضحة.",
         icon: ShieldCheck,
         featureHref: "/dashboard/settings/users",
+        youtubeUrl: "https://www.youtube.com/watch?v=QosndX_3DUg&list=PLdblRkSFK-1c&index=8",
         related: ["invite", "account"],
         sections: [
           {
@@ -799,6 +812,7 @@ export const helpCategories: HelpCategory[] = [
           "تعلّم تحديث بياناتك الشخصية في طبيب تري: تعديل الاسم الأول واسم العائلة من صفحة حسابي، مع معرفة الحقول المرتبطة بحسابك كالبريد الإلكتروني والدور والعيادة.",
         icon: User,
         featureHref: "/dashboard/account",
+        youtubeUrl: "",
         related: ["profile", "plans"],
         sections: [
           {
@@ -837,6 +851,7 @@ export const helpCategories: HelpCategory[] = [
           "تعلّم متابعة باقتك في طبيب تري: عرض الباقة الحالية وحالتها وتاريخ انتهائها، تتبع استهلاك الحدود الشهرية للمواعيد والمرضى ورسائل واتساب، ومقارنة الباقات والترقية.",
         icon: BarChart3,
         featureHref: "/dashboard/settings/plans",
+        youtubeUrl: "",
         related: ["account"],
         sections: [
           {
