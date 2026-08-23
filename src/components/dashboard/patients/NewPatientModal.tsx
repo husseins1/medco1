@@ -12,6 +12,7 @@ import { User, Phone, CalendarDays, UserCircle2, MapPin, MessageSquareText } fro
 import { patientCreateSchema, type PatientCreateInput } from "@/lib/schemas/patient";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 
 interface NewPatientModalProps {
   isOpen: boolean;
@@ -20,6 +21,7 @@ interface NewPatientModalProps {
 
 export function NewPatientModal({ isOpen, onClose }: NewPatientModalProps) {
   const queryClient = useQueryClient();
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -46,7 +48,9 @@ export function NewPatientModal({ isOpen, onClose }: NewPatientModalProps) {
     toast.success("تم إضافة المريض بنجاح");
     reset();
     queryClient.invalidateQueries({ queryKey: ["patients"] });
+    const created = await res.json();
     onClose();
+    router.push(`/dashboard/patients/${created.id}`);
   }
 
   function handleClose() {
