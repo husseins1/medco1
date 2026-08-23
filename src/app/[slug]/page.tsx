@@ -7,7 +7,7 @@ import { enforceAppointmentQuota } from "@/lib/plans/enforce";
 import ClinicHeader from "@/components/profile/ClinicHeader";
 import ClinicBio from "@/components/profile/ClinicBio";
 import QuickActions from "@/components/profile/QuickActions";
-import ClinicMap from "@/components/profile/ClinicMap";
+import ClinicMapClient from "@/components/profile/ClinicMapClient";
 import SocialFooter from "@/components/profile/SocialFooter";
 import DoctorsList from "@/components/profile/DoctorsList";
 import type { SocialPlatform } from "@prisma/client";
@@ -102,7 +102,7 @@ export default async function ClinicProfilePage({ params }: PageProps) {
           }
         />
 
-        <ClinicMap lat={tenant.latitude} lng={tenant.longitude} address={tenant.address} />
+        <ClinicMapClient lat={tenant.latitude} lng={tenant.longitude} address={tenant.address} />
 
         <SocialFooter
           socialLinks={

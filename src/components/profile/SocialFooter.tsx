@@ -1,5 +1,6 @@
-import { Button } from "@/components/ui/Button";
+import { buttonVariants } from "@/components/ui/Button";
 import { Separator } from "@/components/ui/Separator";
+import { cn } from "@/lib/utils";
 import {
   Tooltip,
   TooltipContent,
@@ -67,23 +68,19 @@ export default function SocialFooter({ socialLinks }: SocialFooterProps) {
             }
             return (
               <Tooltip key={link.id}>
-                <TooltipTrigger asChild>
-                  <Button
-                    asChild
-                    variant="ghost"
-                    size="icon"
-                    className="rounded-full size-12 transition-all hover:scale-110 hover:bg-accent hover:text-accent-foreground"
+                <TooltipTrigger >
+                  <a
+                    href={prefix + link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={label}
+                    className={cn(
+                      buttonVariants({ variant: "ghost", size: "icon" }),
+                      "rounded-full size-12 transition-all hover:scale-110 hover:bg-accent hover:text-accent-foreground"
+                    )}
                   >
-                    <a
-                      href={prefix + link.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={label}
-                    >
-                      <Icon className="size-6" />
-                      
-                    </a>
-                  </Button>
+                    <Icon className="size-6" />
+                  </a>
                 </TooltipTrigger>
                 <TooltipContent>
                   <p>{label}</p>
