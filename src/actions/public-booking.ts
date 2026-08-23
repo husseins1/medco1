@@ -164,7 +164,7 @@ export async function getPublicClinicData(slug: string): Promise<PublicClinicDat
     }
     if (docSettings) {
       hasAnySchedule = true;
-      if (docSettings.bookingWindow > bookingWindow) bookingWindow = docSettings.bookingWindow;
+      if (docSettings.bookingWindow) bookingWindow = docSettings.bookingWindow;
       if (minNotice === 0 || docSettings.minNotice < minNotice) {
         minNotice = docSettings.minNotice;
       }

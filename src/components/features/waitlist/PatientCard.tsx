@@ -2,7 +2,7 @@
 
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Calendar, Check, Clock, Phone, Stethoscope, StickyNote } from "lucide-react";
+import { Calendar, Check, Clock, Phone, Stethoscope, StickyNote, Undo2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { BoardPatient } from "@/lib/types/waitlist-board";
 
@@ -13,7 +13,9 @@ interface PatientCardProps {
 
 interface PatientCardStandaloneProps extends PatientCardProps {
   onAdvance?: (patientId: string) => void;
+  onGoBack?: (patientId: string) => void;
   isLastStage?: boolean;
+  isFirstStage?: boolean;
   onViewAppointment?: (patientId: string) => void;
 }
 
@@ -21,7 +23,9 @@ export function PatientCard({
   patient,
   isDragOverlay = false,
   onAdvance,
+  onGoBack,
   isLastStage = false,
+  isFirstStage = false,
   onViewAppointment,
 }: PatientCardStandaloneProps) {
   const {
@@ -107,8 +111,20 @@ export function PatientCard({
         </div>
       </div>
 
-      {(onViewAppointment || (onAdvance && !isLastStage)) && (
+      {(onViewAppointment || (onAdvance && !isLastStage) || (onGoBack && !isFirstStage)) && (
         <div className="flex items-center justify-center gap-2 px-2 pb-2">
+          {onGoBack && !isFirstStage && (
+            <button
+              type="button"
+              onPointerDown={(e) => {
+                e.stopPropagation();
+                onGoBack(patient.id);
+              }}
+              className="flex size-8 items-center justify-center rounded-full bg-amber-500 text-white hover:bg-amber-600 transition-colors cursor-pointer"
+            >
+              <Undo2 className="size-4 rotate-180" />
+            </button>
+          )}
           {onViewAppointment && (
             <button
               type="button"
@@ -133,6 +149,7 @@ export function PatientCard({
               <Check className="size-4" />
             </button>
           )}
+          
         </div>
       )}
     </div>

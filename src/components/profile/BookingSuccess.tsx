@@ -31,11 +31,11 @@ export default function BookingSuccess({
         <div className="flex items-center gap-3 mb-3 pb-3 border-b">
           <CalendarIcon size={18} className="text-muted-foreground" />
           <p className="font-semibold">
-            {date?.toLocaleDateString("ar-SA", {
-              weekday: "long",
-              month: "long",
-              day: "numeric",
-            })}
+            {date &&
+              `${date.toLocaleDateString("ar-SA", {
+                weekday: "long",
+                day: "numeric",
+              })} / ${date.getMonth() + 1}`}
           </p>
         </div>
         <div className="flex items-center gap-3">

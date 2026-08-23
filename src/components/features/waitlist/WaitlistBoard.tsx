@@ -218,6 +218,24 @@ export function WaitlistBoard({ doctorId }: WaitlistBoardProps) {
     [updateAppointment]
   );
 
+  const handleGoBack = useCallback(
+    (patientId: string) => {
+      const currentColumns = columnsRef.current;
+      const sourceCol = findColumnByPatientId(currentColumns, patientId);
+      if (!sourceCol) return;
+
+      const currentIndex = STAGE_ORDER.indexOf(sourceCol);
+      if (currentIndex === 0) return;
+
+      const targetCol = STAGE_ORDER[currentIndex - 1];
+      updateAppointment.mutate({
+        id: patientId,
+        data: { status: targetCol },
+      });
+    },
+    [updateAppointment]
+  );
+
   const handleViewAppointment = useCallback(
     (patientId: string) => {
       const appt = appointments?.find((a) => a.id === patientId);
@@ -311,6 +329,7 @@ export function WaitlistBoard({ doctorId }: WaitlistBoardProps) {
               column={column}
               patients={columns[column.id]}
               onAdvance={handleAdvance}
+              onGoBack={handleGoBack}
               onViewAppointment={handleViewAppointment}
               onAddClick={() => {
                 setTargetStatus(column.id);

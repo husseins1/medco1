@@ -67,8 +67,8 @@ export function snapToQuarter(date: Date): Date {
   return newDate;
 }
 
-export function pixelsToTime(y: number, baseDate: Date): Date {
-  const hoursDecimal = y / HOUR_HEIGHT + START_HOUR;
+export function pixelsToTime(y: number, baseDate: Date, startHour: number = START_HOUR): Date {
+  const hoursDecimal = y / HOUR_HEIGHT + startHour;
   const hours = Math.floor(hoursDecimal);
   const minutes = Math.round((hoursDecimal - hours) * 60);
   const date = new Date(baseDate);
@@ -79,11 +79,12 @@ export function pixelsToTime(y: number, baseDate: Date): Date {
 export function getTimeFromPointer(
   e: React.PointerEvent | PointerEvent,
   baseDate: Date,
-  containerRef: React.RefObject<HTMLDivElement | null>
+  containerRef: React.RefObject<HTMLDivElement | null>,
+  startHour: number = START_HOUR
 ): Date {
   if (!containerRef.current) return baseDate;
   const rect = containerRef.current.getBoundingClientRect();
   const y = e.clientY - rect.top + containerRef.current.scrollTop;
   
-  return pixelsToTime(y, baseDate);
+  return pixelsToTime(y, baseDate, startHour);
 }

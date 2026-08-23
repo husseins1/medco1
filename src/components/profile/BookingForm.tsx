@@ -132,11 +132,11 @@ export default function BookingForm({
             {time ? formatTime12(time) : ""}
           </h4>
           <p className="text-sm font-medium text-muted-foreground">
-            {date?.toLocaleDateString("ar-SA", {
-              weekday: "long",
-              month: "long",
-              day: "numeric",
-            })}
+            {date &&
+              `${date.toLocaleDateString("ar-SA", {
+                weekday: "long",
+                day: "numeric",
+              })} / ${date.getMonth() + 1}`}
           </p>
           <p className="text-xs text-muted-foreground mt-0.5">
             {doctorName}

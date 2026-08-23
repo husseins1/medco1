@@ -61,11 +61,11 @@ export default function TimeSlots({
 
       <h4 className="text-lg font-semibold mb-4 flex items-center gap-2">
         <CalendarIcon size={18} className="text-muted-foreground" />
-        {date?.toLocaleDateString("ar-SA", {
-          weekday: "long",
-          month: "long",
-          day: "numeric",
-        })}
+        {date &&
+          `${date.toLocaleDateString("ar-SA", {
+            weekday: "long",
+            day: "numeric",
+          })} / ${date.getMonth() + 1}`}
       </h4>
 
       <div className="grid grid-cols-2 gap-3 mb-8">

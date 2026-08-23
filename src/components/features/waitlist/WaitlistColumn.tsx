@@ -11,17 +11,19 @@ interface WaitlistColumnProps {
   column: ColumnDefinition;
   patients: BoardPatient[];
   onAdvance?: (patientId: string) => void;
+  onGoBack?: (patientId: string) => void;
   onAddClick?: () => void;
   onViewAppointment?: (patientId: string) => void;
 }
 
-export function WaitlistColumn({ column, patients, onAdvance, onAddClick, onViewAppointment }: WaitlistColumnProps) {
+export function WaitlistColumn({ column, patients, onAdvance, onGoBack, onAddClick, onViewAppointment }: WaitlistColumnProps) {
   const { setNodeRef, isOver } = useDroppable({
     id: column.id,
   });
 
   const patientIds = patients.map((p) => p.id);
   const isLastStage = column.id === "COMPLETED";
+  const isFirstStage = column.id === "BOOKING";
 
   return (
     <div
@@ -82,7 +84,9 @@ export function WaitlistColumn({ column, patients, onAdvance, onAddClick, onView
                 key={patient.id}
                 patient={patient}
                 onAdvance={onAdvance}
+                onGoBack={onGoBack}
                 isLastStage={isLastStage}
+                isFirstStage={isFirstStage}
                 onViewAppointment={onViewAppointment}
               />
             ))

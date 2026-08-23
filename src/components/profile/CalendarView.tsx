@@ -19,7 +19,6 @@ export default function CalendarView({
   bookingWindow,
 }: CalendarViewProps) {
   const [currentDate, setCurrentDate] = useState(new Date());
-
   const daysInMonth = new Date(
     currentDate.getFullYear(),
     currentDate.getMonth() + 1,
@@ -57,17 +56,14 @@ export default function CalendarView({
     <div className="w-full">
       <div className="flex justify-between items-center mb-6">
         <h4 className="text-lg font-semibold">
-          {currentDate.toLocaleDateString("ar-SA", {
-            month: "long",
-            year: "numeric",
-          })}
+          {`${currentDate.getMonth() + 1} / ${currentDate.getFullYear()}`}
         </h4>
         <div className="flex gap-2">
           <Button variant="outline" size="icon-sm" onClick={prevMonth}>
-            <ChevronLeft size={16} />
+            <ChevronRight size={16} />
           </Button>
           <Button variant="outline" size="icon-sm" onClick={nextMonth}>
-            <ChevronRight size={16} />
+            <ChevronLeft size={16} />
           </Button>
         </div>
       </div>

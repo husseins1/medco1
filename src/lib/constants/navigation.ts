@@ -37,19 +37,19 @@ export const navigationGroups: NavGroup[] = [
     ],
   },
   {
-    label: "جدولة المواعيد",
-    items: [
-      { title: "التقويم", href: "/dashboard/calendar", icon: Calendar },
-      { title: "أوقات العمل", href: "/dashboard/availability", icon: Clock },
-      { title: "قائمة الانتظار", href: "/dashboard/waitlist", icon: Users },
-    ],
-  },
-  {
     label: "المرضى",
     items: [
       { title: "قائمة المرضى", href: "/dashboard/patients", icon: UsersRound },
       
      
+    ],
+  },
+  {
+    label: "جدولة المواعيد",
+    items: [
+      { title: "قائمة الانتظار", href: "/dashboard/waitlist", icon: Users },
+      { title: "أوقات العمل", href: "/dashboard/availability", icon: Clock },
+      { title: "التقويم", href: "/dashboard/calendar", icon: Calendar },
     ],
   },
   {

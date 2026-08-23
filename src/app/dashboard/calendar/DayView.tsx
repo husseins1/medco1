@@ -239,7 +239,7 @@ export default function DayView({ appointments, currentDate, startHour, endHour,
 
   const onSlotPointerDown = useCallback((e: React.PointerEvent) => {
     if (!onSlotSelectRef.current) return;
-    const time = getTimeFromPointer(e, currentDate, gridRef);
+    const time = getTimeFromPointer(e, currentDate, gridRef, startHour);
     const snapped = snapToQuarter(time);
     const clamped = new Date(snapped);
     if (clamped.getHours() < startHour) clamped.setHours(startHour, 0, 0, 0);
@@ -259,7 +259,7 @@ export default function DayView({ appointments, currentDate, startHour, endHour,
     const sel = slotSelectionRef.current;
     if (!sel) return;
     if (!slotMovedRef.current && Math.abs(e.clientY - slotStartYRef.current) > 5) slotMovedRef.current = true;
-    const time = getTimeFromPointer(e, currentDate, gridRef);
+    const time = getTimeFromPointer(e, currentDate, gridRef, startHour);
     const snapped = snapToQuarter(time);
     const minEnd = new Date(sel.start.getTime() + 15 * 60 * 1000);
     const gridEnd = new Date(sel.start); gridEnd.setHours(endHour, 0, 0, 0);
@@ -344,7 +344,7 @@ export default function DayView({ appointments, currentDate, startHour, endHour,
 
             {/* Unavailable blocks */}
             {scheduleGapBlocks.map((block, i) => (
-              <div key={i} className="absolute w-full bg-slate-50/60 pointer-events-none z-0" style={{ top: `${(block.start - startHour) * HOUR_HEIGHT}px`, height: `${(block.end - block.start) * HOUR_HEIGHT}px` }} />
+              <div key={i} className="absolute w-full bg-slate-100/80 pointer-events-none z-0" style={{ top: `${(block.start - startHour) * HOUR_HEIGHT}px`, height: `${(block.end - block.start) * HOUR_HEIGHT}px`, backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(0,0,0,0.03) 10px, rgba(0,0,0,0.03) 20px)" }} />
             ))}
 
             {/* Doctor-unavailable blocks */}

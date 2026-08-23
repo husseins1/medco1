@@ -196,7 +196,7 @@ export default function WeekView({ appointments, currentDate, startHour, endHour
                   {scheduleGapBlocks.map((block, i) => (
                     <div
                       key={`unavail-${i}`}
-                      className="absolute w-full bg-slate-100/50 pointer-events-none z-0"
+                      className="absolute w-full bg-slate-100/80 pointer-events-none z-0"
                       style={{
                         top: `${(block.start - startHour) * HOUR_HEIGHT}px`,
                         height: `${(block.end - block.start) * HOUR_HEIGHT}px`,
