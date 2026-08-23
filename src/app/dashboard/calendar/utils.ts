@@ -84,7 +84,7 @@ export function getTimeFromPointer(
 ): Date {
   if (!containerRef.current) return baseDate;
   const rect = containerRef.current.getBoundingClientRect();
-  const y = e.clientY - rect.top + containerRef.current.scrollTop;
+  const y = e.clientY - rect.top;
   
   return pixelsToTime(y, baseDate, startHour);
 }
