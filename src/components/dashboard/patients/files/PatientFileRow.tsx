@@ -11,9 +11,17 @@ import {
   Pencil,
   Check,
   X as XIcon,
+  Eye,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/Input";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/Dialog";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -82,8 +90,12 @@ export function PatientFileRow({
   const [nameDraft, setNameDraft] = useState(file.name);
   const [isSavingName, setIsSavingName] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const [isPreviewLoading, setIsPreviewLoading] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   const Icon = fileIcon(file.mimeType);
+  const isImage = file.mimeType.startsWith("image/");
 
   async function handleDownload() {
     try {
@@ -106,6 +118,31 @@ export function PatientFileRow({
     } finally {
       setIsDownloading(false);
     }
+  }
+
+  function openPreview() {
+    if (!isImage || isPreviewLoading) return;
+    setIsPreviewLoading(true);
+    getPatientFileSignedUrlAction(file.id)
+      .then((res) => {
+        if (res.success) {
+          setPreviewUrl(res.data.url);
+          setIsPreviewOpen(true);
+        } else {
+          toast.error(res.error);
+        }
+      })
+      .catch(() => {
+        toast.error("فشل معاينة الملف");
+      })
+      .finally(() => {
+        setIsPreviewLoading(false);
+      });
+  }
+
+  function closePreview() {
+    setIsPreviewOpen(false);
+    setPreviewUrl(null);
   }
 
   async function handleDelete() {
@@ -238,6 +275,23 @@ export function PatientFileRow({
           </div>
 
           <div className="flex items-center gap-1 shrink-0">
+            {isImage && (
+              <button
+                type="button"
+                onClick={openPreview}
+                disabled={isPreviewLoading}
+                className="p-1.5 rounded-lg text-cyan-700 hover:bg-cyan-50 disabled:opacity-50"
+                title="معاينة"
+              >
+                {isPreviewLoading ? (
+                  <Loader2
+                    className={`animate-spin ${compact ? "w-3.5 h-3.5" : "w-4 h-4"}`}
+                  />
+                ) : (
+                  <Eye className={compact ? "w-3.5 h-3.5" : "w-4 h-4"} />
+                )}
+              </button>
+            )}
             <button
               type="button"
               onClick={handleDownload}
@@ -306,6 +360,28 @@ export function PatientFileRow({
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <Dialog open={isPreviewOpen} onOpenChange={(open) => !open && closePreview()}>
+        <DialogContent className="max-w-3xl">
+          <DialogHeader>
+            <DialogTitle>{file.name}</DialogTitle>
+            <DialogDescription className="sr-only">
+              معاينة ملف: {file.name}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex items-center justify-center py-2">
+            {isPreviewLoading ? (
+              <Loader2 className="w-6 h-6 text-cyan-500 animate-spin" />
+            ) : previewUrl ? (
+              <img
+                src={previewUrl}
+                alt={file.name}
+                className="max-h-[70vh] w-auto max-w-full object-contain rounded-lg"
+              />
+            ) : null}
+          </div>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }
