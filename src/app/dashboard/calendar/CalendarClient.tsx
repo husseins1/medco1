@@ -31,7 +31,6 @@ interface Appointment {
   notes?: string;
   treatmentNote?: string;
   appointmentNumber?: number;
-  caseName?: string;
   colorClass: string;
 }
 

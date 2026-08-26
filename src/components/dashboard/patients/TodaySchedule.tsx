@@ -58,8 +58,6 @@ interface CalendarAppointment {
   startTime: string;
   endTime: string;
   notes: string | null;
-  caseId: string | null;
-  caseName: string | null;
   createdAt: string;
   updatedAt: string;
 }

@@ -16,7 +16,6 @@ import type { Doctor } from "@/hooks/use-doctors"
 import type { CalendarAppointment, CreateAppointmentArgs } from "@/hooks/use-appointments"
 import AppointmentServiceFields from "./AppointmentServiceFields"
 import AppointmentPatientSection from "./AppointmentPatientSection"
-import AppointmentCaseSection from "./AppointmentCaseSection"
 import AppointmentSchedulingFields from "./AppointmentSchedulingFields"
 import AppointmentNotesField from "./AppointmentNotesField"
 import { usePatients } from "@/hooks/use-patients"
@@ -81,7 +80,6 @@ export default function NewAppointmentModal({
           patientMode: "existing",
           patientId: editingAppointment.patientId ?? "",
           newPatient: undefined,
-          caseId: editingAppointment.caseId ?? "",
           date: format(new Date(editingAppointment.startTime), "yyyy-MM-dd"),
           startTime: format(new Date(editingAppointment.startTime), "HH:mm"),
           endTime: format(new Date(editingAppointment.endTime), "HH:mm"),
@@ -94,7 +92,6 @@ export default function NewAppointmentModal({
         patientMode: "existing",
         patientId: initialPatientId ?? "",
         newPatient: undefined,
-        caseId: "",
         date: dateStr,
         startTime: initialStart ? format(initialStart, "HH:mm") : "09:00",
         endTime: initialEnd
@@ -142,7 +139,6 @@ export default function NewAppointmentModal({
           serviceId: data.serviceId,
           doctorId: data.doctorId,
         };
-        updateData.caseId = data.caseId === "__none__" ? "" : (data.caseId || undefined);
         setIsSubmitting(true);
         try {
           await onUpdate?.({ id: editingAppointment.id, data: updateData });
@@ -188,15 +184,6 @@ export default function NewAppointmentModal({
       const doctor = doctors.find((d) => d.id === data.doctorId)
       const service = services.find((s) => s.id === data.serviceId)
 
-      if (data.caseId && data.caseId !== "__none__") {
-        payload.caseId = data.caseId
-      } else if (data.newCase?.title) {
-        payload.newCase = {
-          title: data.newCase.title,
-          description: data.newCase.description || undefined,
-        }
-      }
-
       onCreate({
         input: payload,
         optimistic: {
@@ -235,8 +222,6 @@ export default function NewAppointmentModal({
               initialPatientId={initialPatientId}
             />
           )}
-
-          <AppointmentCaseSection patients={patients} isEditing={!!editingAppointment} />
 
           <div className="border-t border-slate-100 pt-5">
             <AppointmentSchedulingFields />

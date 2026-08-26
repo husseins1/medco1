@@ -24,7 +24,6 @@ export default function AppointmentPatientSection({
 
   const handleModeChange = (mode: string) => {
     setValue("patientMode", mode as "existing" | "new")
-    setValue("caseId", "")
     setValue("patientId", "")
     setValue("newPatient", undefined)
   }

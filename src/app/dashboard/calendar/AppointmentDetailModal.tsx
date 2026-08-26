@@ -168,12 +168,6 @@ export default function AppointmentDetailModal({
                   <User className="w-3.5 h-3.5 inline ms-1" />
                   الطبيب: {appointment.doctorName}
                 </div>
-                {appointment.caseName && (
-                  <div className="flex flex-col gap-0.5 mt-2">
-                    <span className="text-sm font-semibold text-blue-600">الملف الطبي</span>
-                    <span className="text-slate-700 font-medium">{appointment.caseName}</span>
-                  </div>
-                )}
                 {appointment.notes && (
                   <div className="flex flex-col gap-0.5 mt-2">
                     <span className="text-sm font-semibold text-blue-600">ملاحظات</span>

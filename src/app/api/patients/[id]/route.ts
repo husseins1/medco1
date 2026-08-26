@@ -30,7 +30,6 @@ export async function GET(
 
   const patient = await prisma.patient.findFirst({
     where: { id, tenantId: actor.tenantId },
-    include: { cases: true },
   });
 
   if (!patient) {
@@ -83,9 +82,6 @@ export async function GET(
     gender: patient.gender,
     source: patient.source,
     address: patient.address,
-    cases: patient.cases.map((c) => ({
-      id: c.id, title: c.title, createdAt: c.createdAt.toISOString(),
-    })),
     nextAppointment: nextAppt?.startTime?.toISOString() ?? null,
     totalVisits,
     visitHistory: pastAppointments.map((a) => ({
@@ -172,7 +168,6 @@ export async function PATCH(
       ...(source !== undefined && { source }),
       ...(address !== undefined && { address }),
     },
-    include: { cases: true },
   });
 
   return NextResponse.json({
@@ -184,7 +179,6 @@ export async function PATCH(
     gender: updatedPatient.gender,
     source: updatedPatient.source,
     address: updatedPatient.address,
-    cases: updatedPatient.cases.map((c: any) => ({ id: c.id, title: c.title, createdAt: c.createdAt.toISOString() })),
     createdAt: updatedPatient.createdAt.toISOString(),
     updatedAt: updatedPatient.updatedAt.toISOString(),
   });

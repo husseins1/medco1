@@ -4,12 +4,6 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import type { PatientUpdateInput } from "@/lib/schemas/patient";
 
-export interface PatientCase {
-  id: string;
-  title: string;
-  createdAt: string;
-}
-
 export interface VisitNote {
   id: string;
   content?: string;
@@ -37,7 +31,6 @@ export interface Patient {
   gender: string | null;
   source?: string | null;
   address: string | null;
-  cases: PatientCase[];
   visitNotes?: VisitNote[];
   patientFiles?: PatientFile[];
   tags?: string[];

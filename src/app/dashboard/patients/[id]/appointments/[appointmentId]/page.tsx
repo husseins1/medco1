@@ -116,13 +116,6 @@ export default async function AppointmentDetailPage({ params }: AppointmentDetai
         )}
       </div>
 
-      {a.caseName && (
-        <div className="bg-white rounded-xl border border-slate-100 p-4">
-          <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">الحالة المرتبطة</span>
-          <p className="text-sm text-slate-800 font-medium mt-1">{a.caseName}</p>
-        </div>
-      )}
-
       {a.notes && (
         <div className="bg-white rounded-xl border border-slate-100 p-4">
           <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">الملاحظات</span>
@@ -158,7 +151,7 @@ export default async function AppointmentDetailPage({ params }: AppointmentDetai
         </div>
       )}
 
-      {!a.notes && !a.caseName && a.transactions.length === 0 && (
+      {!a.notes && a.transactions.length === 0 && (
         <div className="bg-slate-50 rounded-xl border border-slate-100 p-8 text-center">
           <p className="text-sm text-slate-400">لا توجد تفاصيل إضافية لهذا الموعد</p>
         </div>

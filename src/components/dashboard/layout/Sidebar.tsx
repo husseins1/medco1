@@ -5,7 +5,7 @@ import { navigationGroups } from "../../../lib/constants/navigation";
 import { SidebarItem } from "./SidebarItem";
 import { 
   Activity, ChevronLeft, ChevronRight, User, FileText, 
-  Files, Calendar, Briefcase, CreditCard, Bell, PanelLeftClose, PanelLeft, Pill, Stethoscope,
+  Files, Calendar, CreditCard, Bell, PanelLeftClose, PanelLeft, Pill, Stethoscope,
   Lock, ArrowUpRight,
 } from "lucide-react";
 import { useParams } from "next/navigation";
@@ -54,7 +54,6 @@ export function Sidebar({ isCollapsed, onToggleCollapse, isMobileOpen, onCloseMo
       { title: "ملاحظات الزيارة", href: `${baseUrl}?tab=visits`, icon: Stethoscope },
       { title: "الملفات", href: `${baseUrl}?tab=files`, icon: Files },
       { title: "المواعيد", href: `${baseUrl}?tab=appointments`, icon: Calendar },
-      { title: "الحالات", href: `${baseUrl}?tab=cases`, icon: Briefcase },
       { title: "المدفوعات", href: `${baseUrl}?tab=payments`, icon: CreditCard },
       { title: "التذكيرات", href: `${baseUrl}?tab=reminders`, icon: Bell },
     ];

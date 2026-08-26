@@ -121,7 +121,9 @@ export default function DayView({ appointments, currentDate, startHour, endHour,
   const onUpdateTimeRef = useRef(onUpdateTime);
   const onSlotSelectRef = useRef(onSlotSelect);
   const onSelectApptRef = useRef(onSelectAppt);
-  useEffect(() => { onUpdateTimeRef.current = onUpdateTime; onSlotSelectRef.current = onSlotSelect; onSelectApptRef.current = onSelectAppt; });
+  const startHourRef = useRef(startHour);
+  const endHourRef = useRef(endHour);
+  useEffect(() => { onUpdateTimeRef.current = onUpdateTime; onSlotSelectRef.current = onSlotSelect; onSelectApptRef.current = onSelectAppt; startHourRef.current = startHour; endHourRef.current = endHour; });
 
   const parsedAppointments = useMemo(() => appointments.map(parseApptDates), [appointments]);
 
@@ -209,11 +211,13 @@ export default function DayView({ appointments, currentDate, startHour, endHour,
       const newStart = new Date(current.originalStartTime.getTime() + deltaMs);
       const duration = current.originalEndTime.getTime() - current.originalStartTime.getTime();
       const snappedStart = snapToQuarter(newStart);
+      const sHour = startHourRef.current;
+      const eHour = endHourRef.current;
       let finalStart = snappedStart;
-      if (finalStart.getHours() < startHour) { finalStart = new Date(finalStart); finalStart.setHours(startHour, 0, 0, 0); }
+      if (finalStart.getHours() < sHour) { finalStart = new Date(finalStart); finalStart.setHours(sHour, 0, 0, 0); }
       const potentialEnd = new Date(finalStart.getTime() + duration);
-      if (potentialEnd.getHours() > endHour || (potentialEnd.getHours() === endHour && potentialEnd.getMinutes() > 0)) {
-        finalStart = new Date(potentialEnd); finalStart.setHours(endHour, 0, 0, 0); finalStart = new Date(finalStart.getTime() - duration);
+      if (potentialEnd.getHours() > eHour || (potentialEnd.getHours() === eHour && potentialEnd.getMinutes() > 0)) {
+        finalStart = new Date(potentialEnd); finalStart.setHours(eHour, 0, 0, 0); finalStart = new Date(finalStart.getTime() - duration);
       }
       const next = { ...current, currentStartTime: finalStart, currentEndTime: new Date(finalStart.getTime() + duration) };
       interactionRef.current = next; setInteraction(next);
@@ -221,7 +225,7 @@ export default function DayView({ appointments, currentDate, startHour, endHour,
       const newEnd = new Date(current.originalEndTime.getTime() + deltaMs);
       const minEnd = new Date(current.originalStartTime.getTime() + 15 * 60 * 1000);
       const snappedEnd = snapToQuarter(newEnd);
-      const gridEnd = new Date(current.originalStartTime); gridEnd.setHours(endHour, 0, 0, 0);
+      const gridEnd = new Date(current.originalStartTime); gridEnd.setHours(endHourRef.current, 0, 0, 0);
       let finalEnd = snappedEnd;
       if (finalEnd < minEnd) finalEnd = minEnd;
       if (finalEnd > gridEnd) finalEnd = gridEnd;
@@ -239,15 +243,17 @@ export default function DayView({ appointments, currentDate, startHour, endHour,
 
   const onSlotPointerDown = useCallback((e: React.PointerEvent) => {
     if (!onSlotSelectRef.current) return;
-    const time = getTimeFromPointer(e, currentDate, gridRef, startHour);
+    const sHour = startHourRef.current;
+    const eHour = endHourRef.current;
+    const time = getTimeFromPointer(e, currentDate, gridRef, sHour);
     const snapped = snapToQuarter(time);
     const clamped = new Date(snapped);
-    if (clamped.getHours() < startHour) clamped.setHours(startHour, 0, 0, 0);
-    if (clamped.getHours() >= endHour) return;
+    if (clamped.getHours() < sHour) clamped.setHours(sHour, 0, 0, 0);
+    if (clamped.getHours() >= eHour) return;
     const defaultEnd = new Date(clamped.getTime() + 30 * 60 * 1000);
     let clampedEnd = defaultEnd;
-    if (clampedEnd.getHours() > endHour || (clampedEnd.getHours() === endHour && clampedEnd.getMinutes() > 0)) {
-      clampedEnd = new Date(clamped); clampedEnd.setHours(endHour, 0, 0, 0);
+    if (clampedEnd.getHours() > eHour || (clampedEnd.getHours() === eHour && clampedEnd.getMinutes() > 0)) {
+      clampedEnd = new Date(clamped); clampedEnd.setHours(eHour, 0, 0, 0);
     }
     slotMovedRef.current = false; slotStartYRef.current = e.clientY;
     const sel = { start: clamped, end: clampedEnd };
@@ -259,10 +265,10 @@ export default function DayView({ appointments, currentDate, startHour, endHour,
     const sel = slotSelectionRef.current;
     if (!sel) return;
     if (!slotMovedRef.current && Math.abs(e.clientY - slotStartYRef.current) > 5) slotMovedRef.current = true;
-    const time = getTimeFromPointer(e, currentDate, gridRef, startHour);
+    const time = getTimeFromPointer(e, currentDate, gridRef, startHourRef.current);
     const snapped = snapToQuarter(time);
     const minEnd = new Date(sel.start.getTime() + 15 * 60 * 1000);
-    const gridEnd = new Date(sel.start); gridEnd.setHours(endHour, 0, 0, 0);
+    const gridEnd = new Date(sel.start); gridEnd.setHours(endHourRef.current, 0, 0, 0);
     let finalEnd = snapped;
     if (finalEnd < minEnd) finalEnd = minEnd;
     if (finalEnd > gridEnd) finalEnd = gridEnd;

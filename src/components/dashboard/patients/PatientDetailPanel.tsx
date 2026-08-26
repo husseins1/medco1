@@ -6,12 +6,11 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Patient } from "../../../hooks/use-patients";
 import {
   X, Phone, Mail, CalendarDays, MapPin, Stethoscope, ChevronLeft, Pencil, Trash2,
-  Heart, User, CalendarClock, Hash, Clock, MessageSquareText,
-  Files, Calendar, Briefcase, CreditCard, Bell,
+  User, CalendarClock, Hash, Clock, MessageSquareText,
+  Files, Calendar, CreditCard, Bell,
 } from "lucide-react";
 import { VisitNoteTab } from "./tabs/VisitNoteTab";
 import { PaymentsTab } from "./tabs/PaymentsTab";
-import { CasesTab } from "./tabs/CasesTab";
 import { AppointmentsTab } from "./tabs/AppointmentsTab";
 import { FilesTab } from "./tabs/FilesTab";
 import { RemindersTab } from "./tabs/RemindersTab";
@@ -95,7 +94,6 @@ const PATIENT_TABS = [
   { key: "visits", title: "ملاحظات الزيارة", icon: Stethoscope },
   { key: "files", title: "الملفات", icon: Files },
   { key: "appointments", title: "المواعيد", icon: Calendar },
-  { key: "cases", title: "الحالات", icon: Briefcase },
   { key: "payments", title: "المدفوعات", icon: CreditCard },
   { key: "reminders", title: "التذكيرات", icon: Bell },
 ];
@@ -216,11 +214,7 @@ export function PatientDetailPanel({
       {/* ═══════ STATS BAR ═══════ */}
       <div className="px-5 -mt-3 relative z-10">
         <div className="bg-white rounded-2xl border border-slate-100 shadow-lg shadow-slate-200/50 divide-y divide-slate-100 overflow-hidden">
-          <div className="grid grid-cols-3 divide-x divide-slate-100">
-            <div className="p-3 text-center">
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">الحالات</p>
-              <p className="text-lg font-black text-slate-800">{patient.cases.length}</p>
-            </div>
+          <div className="grid grid-cols-2 divide-x divide-slate-100">
             <div className="p-3 text-center">
               <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">العمر</p>
               <p className="text-lg font-black text-slate-800">{age !== null ? `${age}` : "—"}</p>
@@ -343,37 +337,6 @@ export function PatientDetailPanel({
               </div>
             )}
 
-            {/* Medical Cases */}
-            {patient.cases.length > 0 && (
-              <div>
-                <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-2">
-                  <div className="w-1 h-4 bg-amber-500 rounded-full" />
-                  الحالات الطبية
-                </h3>
-                <div className="space-y-2">
-                  {patient.cases.map((c, i) => (
-                    <div key={c.id} className="bg-white rounded-xl p-4 border border-amber-100 shadow-sm hover:shadow-md transition-shadow">
-                      <div className="flex items-start gap-3">
-                        <div className="w-8 h-8 rounded-xl bg-amber-50 flex items-center justify-center shrink-0 border border-amber-100">
-                          <Heart className="w-4 h-4 text-amber-600" />
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <p className="text-sm font-bold text-slate-800">{c.title}</p>
-                          <p className="text-xs text-slate-400 mt-0.5 flex items-center gap-1.5">
-                            <CalendarDays className="w-3 h-3" />
-                            {formatDateFull(c.createdAt)}
-                          </p>
-                        </div>
-                        <div className="w-6 h-6 rounded-full bg-amber-50 flex items-center justify-center border border-amber-100">
-                          <span className="text-xs font-bold text-amber-600">{i + 1}</span>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
             {/* System Info */}
             <div>
               <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-2">
@@ -390,10 +353,6 @@ export function PatientDetailPanel({
 
         {activeTab === "visits" && (
           <VisitNoteTab patientId={patient.id} patientName={patient.name} />
-        )}
-
-        {activeTab === "cases" && (
-          <CasesTab patientId={patient.id} />
         )}
 
         {activeTab === "files" && (

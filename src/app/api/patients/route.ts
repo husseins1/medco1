@@ -16,7 +16,6 @@ function mapPatient(p: {
   gender: "MALE" | "FEMALE" | null;
   source: string | null;
   address: string | null;
-  cases: { id: string; title: string; createdAt: Date }[];
   createdAt: Date;
   updatedAt: Date;
 }) {
@@ -29,11 +28,6 @@ function mapPatient(p: {
     gender: p.gender,
     source: p.source,
     address: p.address,
-    cases: p.cases.map((c) => ({
-      id: c.id,
-      title: c.title,
-      createdAt: c.createdAt.toISOString(),
-    })),
     createdAt: p.createdAt.toISOString(),
     updatedAt: p.updatedAt.toISOString(),
   };
@@ -103,7 +97,6 @@ export async function GET(request: Request) {
     const [patients, total] = await Promise.all([
       prisma.patient.findMany({
         where,
-        include: { cases: true },
         orderBy,
         skip: offset,
         take: pageSize,
@@ -124,9 +117,6 @@ export async function GET(request: Request) {
 
   const patients = await prisma.patient.findMany({
     where,
-    include: {
-      cases: true,
-    },
     orderBy,
     take: search ? 20 : 100,
   });
@@ -187,9 +177,6 @@ try {
       source: parsedSource || undefined,
       address: address || undefined,
       tenantId: actor.tenantId,
-    },
-    include: {
-      cases: true,
     },
   });
 

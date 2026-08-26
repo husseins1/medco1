@@ -61,7 +61,6 @@ export async function listPatientAppointmentsAction(
     include: {
       service: { select: { name: true } },
       doctor: { select: { firstName: true, lastName: true } },
-      case: { select: { id: true, title: true } },
       transactions: { select: { id: true } },
     },
   });
@@ -73,8 +72,6 @@ export async function listPatientAppointmentsAction(
     startTime: a.startTime.toISOString(),
     endTime: a.endTime.toISOString(),
     status: a.status as PatientAppointmentRow["status"],
-    caseName: a.case?.title ?? null,
-    caseId: a.case?.id ?? null,
     notes: a.notes,
     hasTransactions: a.transactions.length > 0,
     createdAt: a.createdAt.toISOString(),
@@ -118,7 +115,6 @@ export async function getPatientAppointmentAction(
       },
       service: { select: { name: true } },
       doctor: { select: { id: true, firstName: true, lastName: true } },
-      case: { select: { id: true, title: true } },
       transactions: {
         orderBy: { date: "desc" },
         select: {
@@ -151,8 +147,6 @@ export async function getPatientAppointmentAction(
       endTime: a.endTime.toISOString(),
       status: a.status as PatientAppointmentDetail["status"],
       notes: a.notes,
-      caseId: a.case?.id ?? null,
-      caseName: a.case?.title ?? null,
       transactions: a.transactions.map((t) => ({
         id: t.id,
         amount: Number(t.amount),

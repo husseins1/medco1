@@ -142,7 +142,6 @@ export function PatientProfileMock() {
   const tabs = [
     { label: "تفاصيل", active: true },
     { label: "زيارات", active: false },
-    { label: "حالات", active: false },
     { label: "مواعيد", active: false },
     { label: "مدفوعات", active: false },
   ];
@@ -169,9 +168,8 @@ export function PatientProfileMock() {
         </div>
       </div>
 
-      <div className="grid grid-cols-3 divide-x divide-border/60 border-b border-border/60">
+      <div className="grid grid-cols-2 divide-x divide-border/60 border-b border-border/60">
         {[
-          { value: "٣", label: "الحالات" },
           { value: "٣٤", label: "العمر" },
           { value: "ذكر", label: "الجنس" },
         ].map((stat) => (

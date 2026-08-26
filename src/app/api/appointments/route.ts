@@ -54,7 +54,6 @@ export async function GET(request: Request) {
       patient: true,
       doctor: true,
       service: { select: { name: true, color: true, price: true } },
-      case: true,
       transactions: { select: { id: true }, take: 1, orderBy: { date: "desc" } },
     },
     orderBy: { startTime: "asc" },
@@ -74,8 +73,6 @@ export async function GET(request: Request) {
     startTime: appt.startTime.toISOString(),
     endTime: appt.endTime.toISOString(),
     notes: appt.notes,
-    caseId: appt.caseId,
-    caseName: appt.case?.title ?? null,
     hasTransactions: appt.transactions.length > 0,
     lastTransactionId: appt.transactions[0]?.id ?? null,
     servicePrice: appt.service.price ? Number(appt.service.price) : null,
@@ -179,20 +176,6 @@ export async function POST(request: Request) {
     );
   }
 
-  // ─── NEW CASE CREATION ───
-  let caseId = data.caseId;
-  if (!caseId && data.newCase) {
-    const newCase = await prisma.case.create({
-      data: {
-        tenantId: actor.tenantId,
-        patientId,
-        title: data.newCase.title,
-        description: data.newCase.description,
-      },
-    });
-    caseId = newCase.id;
-  }
-
   // Check against doctor-unavailable blocks
   const blockConflict = await prisma.doctorUnavailable.findFirst({
     where: {
@@ -223,7 +206,6 @@ export async function POST(request: Request) {
       patientId,
       doctorId: data.doctorId,
       serviceId: data.serviceId,
-      caseId: caseId ?? undefined,
       startTime: new Date(data.startTime),
       endTime: new Date(data.endTime),
       notes: data.notes,
@@ -233,7 +215,6 @@ export async function POST(request: Request) {
       patient: true,
       doctor: true,
       service: { select: { name: true, color: true, price: true } },
-      case: true,
       transactions: { select: { id: true }, take: 1, orderBy: { date: "desc" } },
     },
   });
@@ -254,8 +235,6 @@ export async function POST(request: Request) {
     startTime: appointment.startTime.toISOString(),
     endTime: appointment.endTime.toISOString(),
     notes: appointment.notes,
-    caseId: appointment.caseId,
-    caseName: appointment.case?.title ?? null,
     hasTransactions: appointment.transactions.length > 0,
     lastTransactionId: appointment.transactions[0]?.id ?? null,
     servicePrice: appointment.service.price ? Number(appointment.service.price) : null,

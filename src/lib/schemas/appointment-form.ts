@@ -8,13 +8,6 @@ export const appointmentFormSchema = z
     patientMode: z.enum(["existing", "new"]),
     patientId: z.string().optional(),
     newPatient: patientCreateSchema.optional(),
-    caseId: z.string().optional(),
-    newCase: z
-      .object({
-        title: z.string().optional(),
-        description: z.string().optional(),
-      })
-      .optional(),
     date: z.string().min(1, "التاريخ مطلوب"),
     startTime: z.string().min(1, "وقت البدء مطلوب"),
     endTime: z.string().min(1, "وقت الانتهاء مطلوب"),

@@ -26,8 +26,6 @@ export interface PatientAppointmentRow {
   startTime: string;
   endTime: string;
   status: AppointmentStatus;
-  caseName: string | null;
-  caseId: string | null;
   notes: string | null;
   hasTransactions: boolean;
   createdAt: string;
@@ -57,8 +55,6 @@ export interface PatientAppointmentDetail {
   endTime: string;
   status: AppointmentStatus;
   notes: string | null;
-  caseId: string | null;
-  caseName: string | null;
   transactions: {
     id: string;
     amount: number;

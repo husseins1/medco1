@@ -29,8 +29,6 @@ export interface CalendarAppointment {
   startTime: string;
   endTime: string;
   notes: string | null;
-  caseId: string | null;
-  caseName: string | null;
   hasTransactions: boolean;
   lastTransactionId: string | null;
   servicePrice: number | null;
@@ -160,8 +158,6 @@ export function useCreateAppointment(from: Date, to: Date) {
         startTime: args.input.startTime,
         endTime: args.input.endTime,
         notes: args.input.notes ?? null,
-        caseId: args.input.caseId ?? null,
-        caseName: null,
         hasTransactions: false,
         lastTransactionId: null,
         servicePrice: null,
@@ -221,7 +217,6 @@ export function useUpdateAppointment(from: Date, to: Date) {
                 ...(data.startTime && { startTime: data.startTime }),
                 ...(data.endTime && { endTime: data.endTime }),
                 ...(data.notes !== undefined && { notes: data.notes }),
-                ...(data.caseId !== undefined && { caseId: data.caseId }),
                 ...(data.serviceId && { serviceId: data.serviceId }),
                 ...(data.doctorId && { doctorId: data.doctorId }),
               }

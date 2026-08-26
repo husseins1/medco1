@@ -67,7 +67,6 @@ export async function PATCH(
         ...(data.startTime && { startTime: new Date(data.startTime) }),
         ...(data.endTime && { endTime: new Date(data.endTime) }),
         ...(data.notes !== undefined && { notes: data.notes }),
-        ...(data.caseId !== undefined && { caseId: data.caseId || null }),
         ...(data.serviceId && { serviceId: data.serviceId }),
         ...(data.doctorId && { doctorId: data.doctorId }),
       },
@@ -75,7 +74,6 @@ export async function PATCH(
         patient: true,
         doctor: true,
         service: { select: { name: true, color: true, price: true } },
-        case: true,
         transactions: {
           select: { id: true, amount: true, type: true, category: true, description: true, date: true },
           orderBy: { date: "desc" },
@@ -90,7 +88,6 @@ export async function PATCH(
       patient: true;
       doctor: true;
       service: true;
-      case: true;
       transactions: {
         select: { id: true; amount: true; type: true; category: true; description: true; date: true };
       };
@@ -111,8 +108,6 @@ export async function PATCH(
     startTime: updated.startTime.toISOString(),
     endTime: updated.endTime.toISOString(),
     notes: updated.notes,
-    caseId: updated.caseId,
-    caseName: updated.case?.title ?? null,
     hasTransactions: updated.transactions.length > 0,
     lastTransactionId: updated.transactions[0]?.id ?? null,
     servicePrice: updated.service.price ? Number(updated.service.price) : null,

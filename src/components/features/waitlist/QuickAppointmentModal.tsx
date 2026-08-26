@@ -17,7 +17,6 @@ import { useDoctors } from "@/hooks/use-doctors"
 import { usePatients } from "@/hooks/use-patients"
 import AppointmentServiceFields from "@/app/dashboard/calendar/AppointmentServiceFields"
 import AppointmentPatientSection from "@/app/dashboard/calendar/AppointmentPatientSection"
-import AppointmentCaseSection from "@/app/dashboard/calendar/AppointmentCaseSection"
 import AppointmentSchedulingFields from "@/app/dashboard/calendar/AppointmentSchedulingFields"
 import AppointmentNotesField from "@/app/dashboard/calendar/AppointmentNotesField"
 import type { WaitlistStatus } from "@/lib/types/waitlist-board"
@@ -83,7 +82,6 @@ export default function QuickAppointmentModal({
       patientMode: "existing",
       patientId: initialPatientId ?? "",
       newPatient: undefined,
-      caseId: "",
       date: dateStr,
       startTime,
       endTime: computeEndTime(dateStr, startTime, defaultDuration),
@@ -153,15 +151,6 @@ export default function QuickAppointmentModal({
       const doctor = doctors.find((d) => d.id === data.doctorId)
       const service = services.find((s) => s.id === data.serviceId)
 
-      if (data.caseId && data.caseId !== "__none__") {
-        payload.caseId = data.caseId
-      } else if (data.newCase?.title) {
-        payload.newCase = {
-          title: data.newCase.title,
-          description: data.newCase.description || undefined,
-        }
-      }
-
       onCreate({
         input: payload,
         optimistic: {
@@ -189,8 +178,6 @@ export default function QuickAppointmentModal({
           <div className="border-t border-slate-100 pt-5" />
 
           <AppointmentPatientSection />
-
-          <AppointmentCaseSection patients={patients} isEditing={false} />
 
           <div className="border-t border-slate-100 pt-5">
             <AppointmentSchedulingFields />
