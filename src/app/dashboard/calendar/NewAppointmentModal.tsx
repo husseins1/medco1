@@ -1,7 +1,6 @@
 "use client"
 
 import React, { useCallback, useMemo, useState } from "react"
-import { format } from "date-fns"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "@/components/ui/Button"
@@ -19,18 +18,15 @@ import AppointmentPatientSection from "./AppointmentPatientSection"
 import AppointmentSchedulingFields from "./AppointmentSchedulingFields"
 import AppointmentNotesField from "./AppointmentNotesField"
 import { usePatients } from "@/hooks/use-patients"
-
-function toTimeString(d: Date) {
-  return `${d.getHours().toString().padStart(2, "0")}:${d.getMinutes().toString().padStart(2, "0")}`
-}
+import { clinicParse, formatClinicTime } from "@/lib/timezone"
 
 function computeEndTime(dateStr: string, startTime: string, duration: number): string {
   if (!dateStr || !startTime) return ""
   const [h, m] = startTime.split(":").map(Number)
-  const start = new Date(dateStr)
-  start.setHours(h || 0, m || 0, 0, 0)
-  const end = new Date(start.getTime() + duration * 60 * 1000)
-  return toTimeString(end)
+  const endMins = (h || 0) * 60 + (m || 0) + duration
+  const eh = Math.floor(endMins / 60) % 24
+  const em = endMins % 60
+  return `${eh.toString().padStart(2, "0")}:${em.toString().padStart(2, "0")}`
 }
 
 interface NewAppointmentModalProps {
@@ -68,7 +64,7 @@ export default function NewAppointmentModal({
 
   const initialService = services[0]
   const defaultDuration = initialService?.duration ?? 30
-  const dateStr = format(initialDate, "yyyy-MM-dd")
+  const dateStr = formatClinicTime(initialDate, "yyyy-MM-dd")
   
   const formValues = useMemo<AppointmentFormValues>(
     () => {
@@ -80,9 +76,9 @@ export default function NewAppointmentModal({
           patientMode: "existing",
           patientId: editingAppointment.patientId ?? "",
           newPatient: undefined,
-          date: format(new Date(editingAppointment.startTime), "yyyy-MM-dd"),
-          startTime: format(new Date(editingAppointment.startTime), "HH:mm"),
-          endTime: format(new Date(editingAppointment.endTime), "HH:mm"),
+          date: formatClinicTime(editingAppointment.startTime, "yyyy-MM-dd"),
+          startTime: formatClinicTime(editingAppointment.startTime, "HH:mm"),
+          endTime: formatClinicTime(editingAppointment.endTime, "HH:mm"),
           notes: editingAppointment.notes ?? "",
         };
       }
@@ -93,10 +89,10 @@ export default function NewAppointmentModal({
         patientId: initialPatientId ?? "",
         newPatient: undefined,
         date: dateStr,
-        startTime: initialStart ? format(initialStart, "HH:mm") : "09:00",
+        startTime: initialStart ? formatClinicTime(initialStart, "HH:mm") : "09:00",
         endTime: initialEnd
-          ? format(initialEnd, "HH:mm")
-          : computeEndTime(dateStr, initialStart ? format(initialStart, "HH:mm") : "09:00", defaultDuration),
+          ? formatClinicTime(initialEnd, "HH:mm")
+          : computeEndTime(dateStr, initialStart ? formatClinicTime(initialStart, "HH:mm") : "09:00", defaultDuration),
         notes: "",
       };
     },
@@ -118,13 +114,8 @@ export default function NewAppointmentModal({
 
   const onSubmit = useCallback(
     async (data: AppointmentFormValues) => {
-      const [h, m] = data.startTime.split(":").map(Number)
-      const start = new Date(data.date)
-      start.setHours(h || 0, m || 0, 0, 0)
-
-      const [eh, em] = data.endTime.split(":").map(Number)
-      const end = new Date(data.date)
-      end.setHours(eh || 0, em || 0, 0, 0)
+      const start = clinicParse(data.date, data.startTime)
+      const end = clinicParse(data.date, data.endTime)
 
       if (end <= start) {
         toast.error("وقت الانتهاء يجب أن يكون بعد وقت البدء")

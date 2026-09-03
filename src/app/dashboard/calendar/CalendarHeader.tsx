@@ -2,8 +2,9 @@
 
 import React from "react";
 import { ChevronRight, ChevronLeft, Plus, ClockAlert } from "lucide-react";
-import { format, endOfWeek } from "date-fns";
+import { endOfWeek } from "date-fns";
 import { arSA } from "date-fns/locale/ar-SA";
+import { formatClinicTime } from "@/lib/timezone";
 import type { ViewMode } from "./types";
 
 interface CalendarHeaderProps {
@@ -43,11 +44,11 @@ export default function CalendarHeader({
         </div>
         <h2 className="text-base md:text-lg font-bold text-slate-800 min-w-[160px]">
           {viewMode === "week" ? (
-            `${format(weekStart, "d MMM", { locale: arSA })} - ${format(endOfWeek(currentDate, { weekStartsOn: 0 }), "d MMM yyyy", { locale: arSA })}`
+            `${formatClinicTime(weekStart, "d MMM", { locale: arSA })} - ${formatClinicTime(endOfWeek(currentDate, { weekStartsOn: 0 }), "d MMM yyyy", { locale: arSA })}`
           ) : viewMode === "month" ? (
-            format(currentDate, "MMMM yyyy", { locale: arSA })
+            formatClinicTime(currentDate, "MMMM yyyy", { locale: arSA })
           ) : (
-            format(currentDate, "EEEE، d MMMM yyyy", { locale: arSA })
+            formatClinicTime(currentDate, "EEEE، d MMMM yyyy", { locale: arSA })
           )}
         </h2>
       </div>

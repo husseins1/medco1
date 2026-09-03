@@ -5,6 +5,7 @@ import { useFormContext, useWatch } from "react-hook-form"
 import { AlertTriangle } from "lucide-react"
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/Input"
+import { clinicParse, toClinicZone } from "@/lib/timezone"
 
 export default function AppointmentSchedulingFields() {
   const { control } = useFormContext()
@@ -13,10 +14,7 @@ export default function AppointmentSchedulingFields() {
 
   const isPastTime = useMemo(() => {
     if (!date || !startTime) return false
-    const [h, m] = startTime.split(":").map(Number)
-    const dt = new Date(date)
-    dt.setHours(h || 0, m || 0, 0, 0)
-    return dt < new Date()
+    return clinicParse(date, startTime) < toClinicZone(new Date())
   }, [date, startTime])
 
   return (

@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useMemo } from "react";
-import { format, startOfMonth, endOfMonth, startOfWeek, endOfWeek, eachDayOfInterval, isSameDay, isSameMonth } from "date-fns";
-import { arSA } from "date-fns/locale/ar-SA";
+import { startOfMonth, endOfMonth, startOfWeek, endOfWeek, eachDayOfInterval, isSameDay, isSameMonth } from "date-fns";
+import { toClinicZone, formatClinicTime } from "@/lib/timezone";
 import type { CalendarAppointment } from "@/hooks/use-appointments";
 
 interface MonthViewProps {
@@ -16,8 +16,8 @@ interface MonthViewProps {
 function parseApptDates(appt: CalendarAppointment) {
   return {
     ...appt,
-    startTime: new Date(appt.startTime),
-    endTime: new Date(appt.endTime),
+    startTime: toClinicZone(appt.startTime),
+    endTime: toClinicZone(appt.endTime),
   };
 }
 
@@ -61,7 +61,7 @@ export default function MonthView({ appointments, currentDate, onChangeDate, onS
         <div className="flex-1 grid grid-cols-7 border-r border-t border-slate-200">
           {monthDays.map((day) => {
             const isCurrentMonth = isSameMonth(day, monthStart);
-            const isToday = isSameDay(day, new Date());
+            const isToday = isSameDay(day, toClinicZone(new Date()));
             const isSelected = isSameDay(day, currentDate);
             const dayAppts = parsedAppointments.filter((a) => isSameDay(a.startTime, day));
 
@@ -75,7 +75,7 @@ export default function MonthView({ appointments, currentDate, onChangeDate, onS
                 {/* Day number */}
                 <div className={`w-7 h-7 flex items-center justify-center text-xs font-bold rounded-full mb-1
                   ${isToday ? "bg-emerald-500 text-white shadow-sm" : isSelected ? "bg-emerald-100 text-emerald-700" : isCurrentMonth ? "text-slate-600" : "text-slate-300"}`}>
-                  {format(day, "d")}
+                  {formatClinicTime(day, "d")}
                 </div>
 
                 {/* Desktop appointments */}

@@ -1,13 +1,14 @@
 "use client";
 
 import React, { useState, useEffect, useMemo, useRef, useCallback } from "react";
-import { format, isSameDay } from "date-fns";
+import { isSameDay } from "date-fns";
 import { arSA } from "date-fns/locale/ar-SA";
 import { enUS } from "date-fns/locale/en-US";
 import { X } from "lucide-react";
 import type { CalendarAppointment } from "@/hooks/use-appointments";
 import { HOUR_HEIGHT } from "./constants";
 import { snapToQuarter, getTimeFromPointer } from "./utils";
+import { toClinicZone, formatClinicTime } from "@/lib/timezone";
 import type { InteractionState, DoctorUnavailableBlock } from "./types";
 
 interface DayViewProps {
@@ -24,7 +25,7 @@ interface DayViewProps {
 }
 
 function parseApptDates(appt: CalendarAppointment) {
-  return { ...appt, startTime: new Date(appt.startTime), endTime: new Date(appt.endTime) };
+  return { ...appt, startTime: toClinicZone(appt.startTime), endTime: toClinicZone(appt.endTime) };
 }
 
 function getColorStyle(color: string): React.CSSProperties {
@@ -80,7 +81,7 @@ function CalendarAppointmentCard({ appt, isInteracting, interactionStartTs, inte
           {height >= 45 && appt.serviceName && <p className="text-[10px] text-slate-400 truncate">{appt.serviceName}</p>}
         </div>
         <div className={`flex items-center gap-1 text-slate-500 ${height < 45 ? "bg-slate-50 px-1.5 rounded" : ""}`}>
-          <span className="text-[10px] font-medium" dir="ltr">{format(displayStart, "HH:mm")} - {format(displayEnd, "HH:mm")}</span>
+          <span className="text-[10px] font-medium" dir="ltr">{formatClinicTime(displayStart, "HH:mm")} - {formatClinicTime(displayEnd, "HH:mm")}</span>
         </div>
       </div>
     </div>
@@ -163,7 +164,7 @@ export default function DayView({ appointments, currentDate, startHour, endHour,
 
   useEffect(() => {
     const update = () => {
-      const now = new Date();
+      const now = toClinicZone(new Date());
       if (isSameDay(now, currentDate)) {
         const hours = now.getHours() + now.getMinutes() / 60;
         if (hours >= startHour && hours <= endHour) setCurrentTimeLine((hours - startHour) * HOUR_HEIGHT);
@@ -175,7 +176,7 @@ export default function DayView({ appointments, currentDate, startHour, endHour,
 
   const scheduleGapBlocks = useMemo(() => {
     if (!schedule) return [];
-    const dayKey = format(currentDate, "EEEE", { locale: enUS }).toLowerCase();
+    const dayKey = formatClinicTime(currentDate, "EEEE", { locale: enUS }).toLowerCase();
     return getUnavailableBlocks(schedule[dayKey], startHour, endHour);
   }, [schedule, currentDate, startHour, endHour]);
 
@@ -183,12 +184,12 @@ export default function DayView({ appointments, currentDate, startHour, endHour,
     if (!unavailableBlocks) return [];
     return unavailableBlocks
       .filter((block) => {
-        const blockStart = new Date(block.startTime);
+        const blockStart = toClinicZone(block.startTime);
         return isSameDay(blockStart, currentDate);
       })
       .map((block) => {
-        const start = new Date(block.startTime);
-        const end = new Date(block.endTime);
+        const start = toClinicZone(block.startTime);
+        const end = toClinicZone(block.endTime);
         const startH = start.getHours() + start.getMinutes() / 60;
         const endH = end.getHours() + end.getMinutes() / 60;
         return { ...block, _startH: startH, _endH: endH };
@@ -314,8 +315,8 @@ export default function DayView({ appointments, currentDate, startHour, endHour,
           </div>
           <div className="flex-1 py-3 px-4 flex items-center justify-center gap-3">
             <div className="text-center">
-              <p className="font-bold text-slate-800 text-sm">{format(currentDate, "EEEE", { locale: arSA })}</p>
-              <p className="text-xs text-slate-400">{format(currentDate, "d MMM", { locale: arSA })}</p>
+              <p className="font-bold text-slate-800 text-sm">{formatClinicTime(currentDate, "EEEE", { locale: arSA })}</p>
+              <p className="text-xs text-slate-400">{formatClinicTime(currentDate, "d MMM", { locale: arSA })}</p>
             </div>
           </div>
         </div>
@@ -394,7 +395,7 @@ export default function DayView({ appointments, currentDate, startHour, endHour,
                   </div>
                   {height >= 35 && (
                     <div className="text-[9px] text-rose-400 px-2 pb-1" dir="ltr">
-                      {format(new Date(block.startTime), "HH:mm")} - {format(new Date(block.endTime), "HH:mm")}
+                      {formatClinicTime(block.startTime, "HH:mm")} - {formatClinicTime(block.endTime, "HH:mm")}
                     </div>
                   )}
                 </div>
@@ -418,8 +419,8 @@ export default function DayView({ appointments, currentDate, startHour, endHour,
                   height: `${(interaction.currentEndTime.getTime() - interaction.currentStartTime.getTime()) / (1000 * 60 * 60) * HOUR_HEIGHT}px`,
                   width: "calc(100% - 12px)", right: "6px" }}>
                 <div className="flex justify-between p-1">
-                  <span className="text-[10px] font-bold text-emerald-600 bg-white px-1.5 py-0.5 rounded shadow-sm">{format(interaction.currentStartTime, "HH:mm")}</span>
-                  <span className="text-[10px] font-bold text-emerald-600 bg-white px-1.5 py-0.5 rounded shadow-sm">{format(interaction.currentEndTime, "HH:mm")}</span>
+                  <span className="text-[10px] font-bold text-emerald-600 bg-white px-1.5 py-0.5 rounded shadow-sm">{formatClinicTime(interaction.currentStartTime, "HH:mm")}</span>
+                  <span className="text-[10px] font-bold text-emerald-600 bg-white px-1.5 py-0.5 rounded shadow-sm">{formatClinicTime(interaction.currentEndTime, "HH:mm")}</span>
                 </div>
               </div>
             )}
@@ -431,8 +432,8 @@ export default function DayView({ appointments, currentDate, startHour, endHour,
                   height: `${(slotSelection.end.getTime() - slotSelection.start.getTime()) / (1000 * 60 * 60) * HOUR_HEIGHT}px`,
                   width: "calc(100% - 12px)", right: "6px" }}>
                 <div className="flex justify-between p-1">
-                  <span className="text-[10px] font-bold text-emerald-600 bg-white px-1.5 py-0.5 rounded shadow-sm">{format(slotSelection.start, "HH:mm")}</span>
-                  <span className="text-[10px] font-bold text-emerald-600 bg-white px-1.5 py-0.5 rounded shadow-sm">{format(slotSelection.end, "HH:mm")}</span>
+                  <span className="text-[10px] font-bold text-emerald-600 bg-white px-1.5 py-0.5 rounded shadow-sm">{formatClinicTime(slotSelection.start, "HH:mm")}</span>
+                  <span className="text-[10px] font-bold text-emerald-600 bg-white px-1.5 py-0.5 rounded shadow-sm">{formatClinicTime(slotSelection.end, "HH:mm")}</span>
                 </div>
               </div>
             )}

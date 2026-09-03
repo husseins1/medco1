@@ -1,7 +1,6 @@
 "use client"
 
 import React, { useCallback, useMemo, useState } from "react"
-import { format } from "date-fns"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "@/components/ui/Button"
@@ -20,10 +19,7 @@ import AppointmentPatientSection from "@/app/dashboard/calendar/AppointmentPatie
 import AppointmentSchedulingFields from "@/app/dashboard/calendar/AppointmentSchedulingFields"
 import AppointmentNotesField from "@/app/dashboard/calendar/AppointmentNotesField"
 import type { WaitlistStatus } from "@/lib/types/waitlist-board"
-
-function toTimeString(d: Date) {
-  return `${d.getHours().toString().padStart(2, "0")}:${d.getMinutes().toString().padStart(2, "0")}`
-}
+import { clinicParse, formatClinicTime, toClinicZone } from "@/lib/timezone"
 
 function roundUpToNext15(d: Date): Date {
   const ms = 15 * 60 * 1000
@@ -33,10 +29,10 @@ function roundUpToNext15(d: Date): Date {
 function computeEndTime(dateStr: string, startTime: string, duration: number): string {
   if (!dateStr || !startTime) return ""
   const [h, m] = startTime.split(":").map(Number)
-  const start = new Date(dateStr)
-  start.setHours(h || 0, m || 0, 0, 0)
-  const end = new Date(start.getTime() + duration * 60 * 1000)
-  return toTimeString(end)
+  const endMins = (h || 0) * 60 + (m || 0) + duration
+  const eh = Math.floor(endMins / 60) % 24
+  const em = endMins % 60
+  return `${eh.toString().padStart(2, "0")}:${em.toString().padStart(2, "0")}`
 }
 
 const COLUMN_TO_STATUS: Record<WaitlistStatus, "SCHEDULED" | "WAITING" | "IN_PROGRESS" | "COMPLETED"> = {
@@ -73,9 +69,9 @@ export default function QuickAppointmentModal({
   const defaultDuration = initialService?.duration ?? 30
 
   const formValues = useMemo<AppointmentFormValues>(() => {
-    const dateStr = format(new Date(), "yyyy-MM-dd")
-    const start = roundUpToNext15(new Date())
-    const startTime = toTimeString(start)
+    const dateStr = formatClinicTime(new Date(), "yyyy-MM-dd")
+    const start = roundUpToNext15(toClinicZone(new Date()))
+    const startTime = formatClinicTime(start, "HH:mm")
     return {
       doctorId: doctors[0]?.id ?? "",
       serviceId: initialService?.id ?? "",
@@ -104,13 +100,8 @@ export default function QuickAppointmentModal({
 
   const onSubmit = useCallback(
     async (data: AppointmentFormValues) => {
-      const [h, m] = data.startTime.split(":").map(Number)
-      const start = new Date(data.date)
-      start.setHours(h || 0, m || 0, 0, 0)
-
-      const [eh, em] = data.endTime.split(":").map(Number)
-      const end = new Date(data.date)
-      end.setHours(eh || 0, em || 0, 0, 0)
+      const start = clinicParse(data.date, data.startTime)
+      const end = clinicParse(data.date, data.endTime)
 
       if (end <= start) {
         toast.error("وقت الانتهاء يجب أن يكون بعد وقت البدء")

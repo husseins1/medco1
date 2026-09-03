@@ -19,7 +19,6 @@ import {
   Stethoscope,
   FileText,
 } from "lucide-react";
-import { format } from "date-fns";
 import { arSA } from "date-fns/locale/ar-SA";
 import { toast } from "sonner";
 import Link from "next/link";
@@ -45,6 +44,7 @@ import {
 } from "@/lib/schemas/appointment-payment";
 import { recordAppointmentPaymentAction } from "./actions";
 import { STATUS_MAP } from "./utils";
+import { formatClinicTime } from "@/lib/timezone";
 import { VisitNoteFormDialog } from "@/components/dashboard/patients/visit-notes/VisitNoteFormDialog";
 import { getVisitNotesByAppointmentAction } from "@/app/dashboard/patients/[id]/visit-notes/actions";
 import type { VisitNoteRow } from "@/app/dashboard/patients/[id]/visit-notes/actions";
@@ -61,11 +61,11 @@ interface AppointmentDetailModalProps {
 }
 
 function todayIso() {
-  return new Date().toISOString().split("T")[0];
+  return formatClinicTime(new Date(), "yyyy-MM-dd");
 }
 
 function formatDisplayDate(iso: string) {
-  return format(new Date(iso), "EEEE، d MMMM yyyy", { locale: arSA });
+  return formatClinicTime(iso, "EEEE، d MMMM yyyy", { locale: arSA });
 }
 
 export default function AppointmentDetailModal({
@@ -141,7 +141,7 @@ export default function AppointmentDetailModal({
               </span>
               <span className="flex items-center gap-1.5">
                 <Clock className="w-3.5 h-3.5 md:w-4 md:h-4" />
-                في {format(new Date(appointment.startTime), "hh:mm a", { locale: arSA })}
+                في {formatClinicTime(appointment.startTime, "hh:mm a", { locale: arSA })}
               </span>
             </div>
           </div>
@@ -269,7 +269,7 @@ export default function AppointmentDetailModal({
                               {note.diagnosis || note.content?.slice(0, 60) || "ملاحظة زيارة"}
                             </p>
                             <p className="text-xs text-slate-400 mt-0.5">
-                              {new Date(note.createdAt).toLocaleDateString("ar-SA")}
+                              {formatClinicTime(note.createdAt, "d MMM yyyy")}
                               {note.medications.length > 0 && ` · ${note.medications.length} دواء`}
                             </p>
                           </div>
@@ -342,7 +342,7 @@ export default function AppointmentDetailModal({
 
         <div className="bg-slate-100 py-3 text-center">
           <p className="text-[11px] italic text-slate-500 font-medium">
-            آخر تحديث: {format(new Date(appointment.updatedAt), "d MMM yyyy، hh:mm a", { locale: arSA })}
+            آخر تحديث: {formatClinicTime(appointment.updatedAt, "d MMM yyyy، hh:mm a", { locale: arSA })}
           </p>
         </div>
       </div>

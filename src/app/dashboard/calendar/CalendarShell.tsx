@@ -31,9 +31,10 @@ import NewAppointmentModal from "./NewAppointmentModal";
 import UnavailableBlockModal from "./UnavailableBlockModal";
 import { SendReminderDialog } from "@/components/dashboard/appointments/SendReminderDialog";
 import { useDebounce } from "@/lib/utils/debounce";
+import { toClinicZone } from "@/lib/timezone";
 
 export default function CalendarShell() {
-  const [currentDate, setCurrentDate] = useState<Date>(new Date());
+  const [currentDate, setCurrentDate] = useState<Date>(() => toClinicZone(new Date()));
   const debouncedCurrentDate = useDebounce(currentDate, 350);
   const isDebouncePending = currentDate.getTime() !== debouncedCurrentDate.getTime();
   const [viewMode, setViewMode] = useState<ViewMode>("day");
@@ -155,7 +156,7 @@ export default function CalendarShell() {
     else setCurrentDate((prev) => addDays(prev, 1));
   };
 
-  const handleToday = () => setCurrentDate(new Date());
+  const handleToday = () => setCurrentDate(toClinicZone(new Date()));
 
   const handleStatusChange = (id: string, status: AppointmentPatchInput["status"]) => {
     if (!status) return;

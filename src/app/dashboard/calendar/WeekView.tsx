@@ -1,13 +1,14 @@
 "use client";
 
 import React, { useMemo, useState, useEffect } from "react";
-import { format, startOfWeek, addDays, isSameDay, endOfWeek } from "date-fns";
+import { startOfWeek, addDays, isSameDay } from "date-fns";
 import { arSA } from "date-fns/locale/ar-SA";
 import { enUS } from "date-fns/locale/en-US";
 import { X } from "lucide-react";
 import type { CalendarAppointment } from "@/hooks/use-appointments";
 import { HOUR_HEIGHT } from "./constants";
 import { STATUS_MAP } from "./utils";
+import { toClinicZone, formatClinicTime } from "@/lib/timezone";
 import type { DoctorUnavailableBlock } from "./types";
 
 interface WeekViewProps {
@@ -26,8 +27,8 @@ interface WeekViewProps {
 function parseApptDates(appt: CalendarAppointment) {
   return {
     ...appt,
-    startTime: new Date(appt.startTime),
-    endTime: new Date(appt.endTime),
+    startTime: toClinicZone(appt.startTime),
+    endTime: toClinicZone(appt.endTime),
   };
 }
 
@@ -81,7 +82,7 @@ export default function WeekView({ appointments, currentDate, startHour, endHour
 
   useEffect(() => {
     const updateTimeLine = () => {
-      const now = new Date();
+      const now = toClinicZone(new Date());
       const todayIndex = weekDays.findIndex((d) => isSameDay(d, now));
       if (todayIndex !== -1) {
         const hours = now.getHours() + now.getMinutes() / 60;
@@ -109,7 +110,7 @@ export default function WeekView({ appointments, currentDate, startHour, endHour
           </div>
           <div className="flex-1 flex">
             {weekDays.map((day) => {
-              const isToday = isSameDay(day, new Date());
+              const isToday = isSameDay(day, toClinicZone(new Date()));
               const isSelected = isSameDay(day, currentDate);
               return (
                 <div
@@ -118,10 +119,10 @@ export default function WeekView({ appointments, currentDate, startHour, endHour
                 >
                   <div className={`text-center px-2 md:px-4 py-1 rounded-xl transition-all ${isToday ? "bg-blue-50" : ""} ${isSelected && !isToday ? "ring-2 ring-blue-200 bg-blue-50/50" : ""}`}>
                     <div className={`font-bold text-[10px] md:text-sm ${isToday ? "text-blue-700" : isSelected ? "text-blue-600" : "text-slate-800"}`}>
-                      {format(day, "EEE", { locale: arSA })}
+                      {formatClinicTime(day, "EEE", { locale: arSA })}
                     </div>
                     <div className={`text-[9px] md:text-xs mt-0.5 ${isToday ? "text-blue-600 font-semibold" : isSelected ? "text-blue-500 font-semibold" : "text-slate-500"}`}>
-                      {format(day, "d MMM", { locale: arSA })}
+                      {formatClinicTime(day, "d MMM", { locale: arSA })}
                     </div>
                   </div>
                 </div>
@@ -174,13 +175,13 @@ export default function WeekView({ appointments, currentDate, startHour, endHour
               const dayAppointments = parsedAppointments.filter((appt) =>
                 isSameDay(appt.startTime, day)
               );
-              const isToday = isSameDay(day, new Date());
+              const isToday = isSameDay(day, toClinicZone(new Date()));
               
-              const dayKey = format(day, "EEEE", { locale: enUS }).toLowerCase();
+              const dayKey = formatClinicTime(day, "EEEE", { locale: enUS }).toLowerCase();
               const scheduleGapBlocks = schedule ? getUnavailableBlocks(schedule[dayKey], startHour, endHour) : [];
 
               const dayDoctorBlocks = (unavailableBlocks ?? []).filter((block) =>
-                isSameDay(new Date(block.startTime), day)
+                isSameDay(toClinicZone(block.startTime), day)
               );
 
               return (
@@ -207,8 +208,8 @@ export default function WeekView({ appointments, currentDate, startHour, endHour
 
                   {/* Doctor-unavailable blocks */}
                   {dayDoctorBlocks.map((block) => {
-                    const start = new Date(block.startTime);
-                    const end = new Date(block.endTime);
+                    const start = toClinicZone(block.startTime);
+                    const end = toClinicZone(block.endTime);
                     const startH = start.getHours() + start.getMinutes() / 60;
                     const endH = end.getHours() + end.getMinutes() / 60;
                     const topOffset = (startH - startHour) * HOUR_HEIGHT;
@@ -299,7 +300,7 @@ export default function WeekView({ appointments, currentDate, startHour, endHour
                           {height >= 60 && StatusIcon && (
                             <div className="mt-auto text-[8px] md:text-[10px] font-semibold opacity-80 flex items-center justify-between">
                               <span dir="ltr" className="md:inline hidden">
-                                {format(appt.startTime, "h:mm")}
+                                {formatClinicTime(appt.startTime, "h:mm")}
                               </span>
                               <StatusIcon className="w-2.5 h-2.5 md:w-3 md:h-3" />
                             </div>

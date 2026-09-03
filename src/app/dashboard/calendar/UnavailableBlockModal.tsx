@@ -4,8 +4,6 @@ import React, { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { format } from "date-fns";
-import { arSA } from "date-fns/locale/ar-SA";
 import { Button } from "@/components/ui/Button";
 import { Modal } from "@/components/ui/Modal";
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
@@ -19,6 +17,7 @@ import {
   SelectValue,
 } from "@/components/ui/Select";
 import type { Doctor } from "@/hooks/use-doctors";
+import { clinicParse, formatClinicTime } from "@/lib/timezone";
 
 const blockFormSchema = z
   .object({
@@ -54,10 +53,7 @@ interface UnavailableBlockModalProps {
 
 function toISODateTime(dateStr: string, timeStr: string): string {
   if (!dateStr || !timeStr) return "";
-  const [h, m] = timeStr.split(":").map(Number);
-  const d = new Date(dateStr);
-  d.setHours(h || 0, m || 0, 0, 0);
-  return d.toISOString();
+  return clinicParse(dateStr, timeStr).toISOString();
 }
 
 export default function UnavailableBlockModal({
@@ -71,7 +67,7 @@ export default function UnavailableBlockModal({
   isSubmitting,
 }: UnavailableBlockModalProps) {
   const defaultDate = useMemo(
-    () => format(initialDate, "yyyy-MM-dd"),
+    () => formatClinicTime(initialDate, "yyyy-MM-dd"),
     [initialDate]
   );
 

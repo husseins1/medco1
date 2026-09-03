@@ -1,9 +1,11 @@
 import React from "react";
+import { arSA } from "date-fns/locale/ar-SA";
 import DashboardClient from "@/components/dashboard/DashboardClient";
 import { DashboardService } from "@/services/dashboard";
 import prisma from "@/lib/prisma";
 import { getUserId } from "@/lib/tenant";
 import { createClient } from "@/utils/supabase/server";
+import { formatClinicTime } from "@/lib/timezone";
 import type { UserRole } from "@/lib/types/auth";
 
 export default async function DashboardPage() {
@@ -49,8 +51,8 @@ export default async function DashboardPage() {
     id: app.id,
     patientId: app.patientId,
     patientName: `${app.patient.firstName} ${app.patient.lastName}`,
-    date: app.startTime.toLocaleDateString('ar-EG', { day: 'numeric', month: 'long' }),
-    time: app.startTime.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' }),
+    date: formatClinicTime(app.startTime, "d MMMM", { locale: arSA }),
+    time: formatClinicTime(app.startTime, "HH:mm"),
     type: "consultation" as const,
     status: (app.status || "SCHEDULED").toUpperCase() as "SCHEDULED" | "CONFIRMED" | "COMPLETED" | "CANCELLED" | "NO_SHOW",
     doctor: app.doctor?.firstName ? `د. ${app.doctor.firstName}` : "",

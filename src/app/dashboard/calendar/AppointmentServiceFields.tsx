@@ -19,17 +19,13 @@ import {
 import type { Doctor } from "@/hooks/use-doctors"
 import { useServices } from "@/hooks/use-services"
 
-function toTimeString(d: Date) {
-  return `${d.getHours().toString().padStart(2, "0")}:${d.getMinutes().toString().padStart(2, "0")}`
-}
-
 function computeEndTime(dateStr: string, startTime: string, duration: number): string {
   if (!dateStr || !startTime) return ""
   const [h, m] = startTime.split(":").map(Number)
-  const start = new Date(dateStr)
-  start.setHours(h || 0, m || 0, 0, 0)
-  const end = new Date(start.getTime() + duration * 60 * 1000)
-  return toTimeString(end)
+  const endMins = (h || 0) * 60 + (m || 0) + duration
+  const eh = Math.floor(endMins / 60) % 24
+  const em = endMins % 60
+  return `${eh.toString().padStart(2, "0")}:${em.toString().padStart(2, "0")}`
 }
 
 interface AppointmentServiceFieldsProps {
