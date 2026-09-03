@@ -58,7 +58,7 @@ const handleSortChange = (field: string) => {
 const { user, role } = useAuth();
 
 const today = new Date();
-const { data: todayApps, isLoading: appsLoading, error: appsError, refetch: refetchApps } = useAppointments(
+const { data: todayApps, isLoading: appsLoading, isFetching: appsFetching, error: appsError, refetch: refetchApps } = useAppointments(
   startOfDay(today),
   endOfDay(today),
   role && role !== "RECEPTIONIST" ? { status: "IN_PROGRESS", doctorId: user?.id } : undefined,
@@ -118,7 +118,7 @@ const showTodaySchedule = role && role !== "RECEPTIONIST";
       <div className="flex gap-5 flex-1 min-h-0">
         <div className="flex flex-col gap-5 flex-1 min-h-0 overflow-y-auto custom-scrollbar">
           {showTodaySchedule && (
-            <TodaySchedule appointments={todayApps} isLoading={appsLoading} error={appsError} onRefetch={refetchApps} />
+            <TodaySchedule appointments={todayApps} isLoading={appsLoading} isFetching={appsFetching} error={appsError} onRefetch={refetchApps} />
           )}
 
           <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden shrink-0 p-6">

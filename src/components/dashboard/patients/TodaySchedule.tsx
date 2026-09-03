@@ -13,6 +13,7 @@ import {
   Coffee,
   Loader2,
   ChevronLeft,
+  RefreshCw,
 } from "lucide-react";
 
 const STATUS_STYLE: Record<string, { label: string; bg: string; dot: string; text: string }> = {
@@ -65,11 +66,12 @@ interface CalendarAppointment {
 interface TodayScheduleProps {
   appointments: CalendarAppointment[] | undefined;
   isLoading: boolean;
+  isFetching: boolean;
   error: Error | null;
   onRefetch: () => void;
 }
 
-export function TodaySchedule({ appointments, isLoading, error, onRefetch }: TodayScheduleProps) {
+export function TodaySchedule({ appointments, isLoading, isFetching, error, onRefetch }: TodayScheduleProps) {
   const router = useRouter();
 
   const todayStr = new Date().toLocaleDateString("ar-SA", {
@@ -119,10 +121,25 @@ export function TodaySchedule({ appointments, isLoading, error, onRefetch }: Tod
             </div>
           </div>
           {!isLoading && (
-            <div className="flex items-center gap-1.5 bg-white/70 backdrop-blur-sm rounded-lg px-3 py-1.5 border border-slate-200/60">
-              <Users className="w-3.5 h-3.5 text-slate-400" />
-              <span className="text-xs font-bold text-slate-700">{total}</span>
-              <span className="text-[10px] text-slate-400">مريض</span>
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5 bg-white/70 backdrop-blur-sm rounded-lg px-3 py-1.5 border border-slate-200/60">
+                <Users className="w-3.5 h-3.5 text-slate-400" />
+                <span className="text-xs font-bold text-slate-700">{total}</span>
+                <span className="text-[10px] text-slate-400">مريض</span>
+              </div>
+              <button
+                onClick={onRefetch}
+                disabled={isLoading || isFetching}
+                aria-label="تحديث المواعيد"
+                aria-busy={isFetching}
+                className="h-8 w-8 flex items-center justify-center rounded-lg bg-white/70 border border-slate-200/60 text-slate-500 hover:text-indigo-600 hover:border-indigo-200 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+              >
+                {isFetching ? (
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                ) : (
+                  <RefreshCw className="w-3.5 h-3.5" />
+                )}
+              </button>
             </div>
           )}
         </div>
