@@ -13,7 +13,8 @@ import type { AppointmentFormValues } from "@/lib/schemas/appointment-form"
 import type { AppointmentCreateInput } from "@/lib/schemas/appointment"
 import type { CreateAppointmentArgs } from "@/hooks/use-appointments"
 import { useDoctors } from "@/hooks/use-doctors"
-import { usePatients } from "@/hooks/use-patients"
+import { usePatients, usePatient } from "@/hooks/use-patients"
+import { User } from "lucide-react"
 import AppointmentServiceFields from "@/app/dashboard/calendar/AppointmentServiceFields"
 import AppointmentPatientSection from "@/app/dashboard/calendar/AppointmentPatientSection"
 import AppointmentSchedulingFields from "@/app/dashboard/calendar/AppointmentSchedulingFields"
@@ -63,6 +64,7 @@ export default function QuickAppointmentModal({
   const doctors = doctorsData ?? []
   const { data: patientsData } = usePatients()
   const patients = patientsData ?? []
+  const { data: presetPatient } = usePatient(initialPatientId ?? "")
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const initialService = services[0]
@@ -168,7 +170,22 @@ export default function QuickAppointmentModal({
 
           <div className="border-t border-slate-100 pt-5" />
 
-          <AppointmentPatientSection />
+          {initialPatientId ? (
+            <div className="space-y-4">
+              <span className="text-sm font-semibold text-slate-700">بيانات المريض</span>
+              <div className="p-3 bg-slate-50 rounded-lg border border-slate-200 flex items-center gap-2">
+                <User className="w-4 h-4 text-slate-400" />
+                <div>
+                  <p className="text-sm font-medium text-slate-700">{presetPatient?.name ?? "..."}</p>
+                  {presetPatient?.phone && (
+                    <p className="text-xs text-slate-500" dir="ltr">{presetPatient.phone}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+          ) : (
+            <AppointmentPatientSection />
+          )}
 
           <div className="border-t border-slate-100 pt-5">
             <AppointmentSchedulingFields />

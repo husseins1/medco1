@@ -65,6 +65,8 @@ import {
   listPatientAppointmentsAction,
   updatePatientAppointmentAction,
 } from "@/app/dashboard/patients/[id]/appointments/actions";
+import { useCreateAppointment } from "@/hooks/use-appointments";
+import QuickAppointmentModal from "@/components/features/waitlist/QuickAppointmentModal";
 
 const appointmentFormSchema = z.object({
   status: z
@@ -95,6 +97,17 @@ function formatTime(iso: string) {
   });
 }
 
+function todayRange() {
+  const now = new Date();
+  const y = now.getFullYear();
+  const m = now.getMonth();
+  const d = now.getDate();
+  return {
+    from: new Date(Date.UTC(y, m, d)),
+    to: new Date(Date.UTC(y, m, d, 23, 59, 59, 999)),
+  };
+}
+
 interface AppointmentsTabProps {
   patientId: string;
 }
@@ -115,6 +128,9 @@ export function AppointmentsTab({ patientId }: AppointmentsTabProps) {
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
   const [isDeleting, startDeleteTransition] = useTransition();
   const [, startRefresh] = useTransition();
+  const [isNewOpen, setIsNewOpen] = useState(false);
+  const { from, to } = useMemo(() => todayRange(), []);
+  const { mutate: createAppointment } = useCreateAppointment(from, to);
 
   const refresh = useCallback(async () => {
     const res = await listPatientAppointmentsAction(patientId);
@@ -189,7 +205,7 @@ export function AppointmentsTab({ patientId }: AppointmentsTabProps) {
           </p>
         </div>
         <Button
-          onClick={() => router.push("/dashboard/calendar")}
+          onClick={() => setIsNewOpen(true)}
           size="sm"
           className="gap-1.5"
         >
@@ -221,6 +237,14 @@ export function AppointmentsTab({ patientId }: AppointmentsTabProps) {
         editingId={editingRow?.id ?? null}
         editingRow={editingRow}
         onSaved={handleSaved}
+      />
+
+      <QuickAppointmentModal
+        isOpen={isNewOpen}
+        onClose={() => setIsNewOpen(false)}
+        initialStatus="BOOKING"
+        initialPatientId={patientId}
+        onCreate={(args) => createAppointment(args, { onSuccess: () => refresh() })}
       />
 
       <AlertDialog open={!!deleteTarget} onOpenChange={(open) => !open && setDeleteTarget(null)}>
