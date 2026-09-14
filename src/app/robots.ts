@@ -17,6 +17,7 @@ export default function robots(): MetadataRoute.Robots {
         "/upgrade",
         "/unauthorized",
         "/auth",
+        "/cms",
       ],
     },
     sitemap: `${siteUrl}/sitemap.xml`,

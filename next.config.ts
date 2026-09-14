@@ -1,6 +1,13 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  experimental: {
+    serverActions: {
+      // Blog cover images are uploaded through a Server Action (max 5 MB),
+      // plus form text — raise the default 1 MB limit accordingly.
+      bodySizeLimit: "8mb",
+    },
+  },
   async headers() {
     return [
       {

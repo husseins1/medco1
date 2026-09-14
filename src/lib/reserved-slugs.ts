@@ -20,6 +20,7 @@ export const RESERVED_SLUGS = [
   "terms",
   "privacy",
   "blog",
+  "cms",
   "news",
   "test",
   "demo",

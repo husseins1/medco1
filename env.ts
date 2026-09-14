@@ -24,6 +24,7 @@ const envSchema = z.object({
   META_CAPI_ACCESS_TOKEN: z.string().optional(),
   META_PIXEL_ID: z.string().optional(),
   META_TEST_EVENT_CODE: z.string().optional(),
+  CMS_OWNER_EMAIL: z.string().email().optional(),
 });
 
 export function validateEnv() {

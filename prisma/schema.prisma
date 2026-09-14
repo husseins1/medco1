@@ -7,19 +7,19 @@ datasource db {
 }
 
 model Tenant {
-  id                     String   @id @default(uuid())
-  name                   String
-  slug                   String   @unique
-  phone                  String?
-  specialty              String?
-  bio                    String?
-  logo                   String?
-  qrCode                 String?
-  address                String?
-  latitude               Float?
-  longitude              Float?
+  id        String   @id @default(uuid())
+  name      String
+  slug      String   @unique
+  phone     String?
+  specialty String?
+  bio       String?
+  logo      String?
+  qrCode    String?
+  address   String?
+  latitude  Float?
+  longitude Float?
   createdAt DateTime @default(now())
-  updatedAt              DateTime @updatedAt
+  updatedAt DateTime @updatedAt
 
   profiles           Profile[]
   patients           Patient[]
@@ -75,7 +75,7 @@ model UsageCounter {
   id                String   @id @default(uuid())
   tenantId          String
   tenant            Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  periodMonth       String   // "YYYY-MM"
+  periodMonth       String // "YYYY-MM"
   appointmentsCount Int      @default(0)
   whatsappCount     Int      @default(0)
   createdAt         DateTime @default(now())
@@ -115,11 +115,11 @@ model Profile {
   tenantId String?
   tenant   Tenant? @relation(fields: [tenantId], references: [id], onDelete: SetNull)
 
-  appointments        Appointment[] @relation("DoctorAppointments")
-  doctorUnavailable   DoctorUnavailable[]
-  availability        DoctorAvailability?
-  sentInvitations     Invitation[]  @relation("SentInvitations")
-  acceptedInvitations Invitation[]  @relation("AcceptedInvitations")
+  appointments         Appointment[]       @relation("DoctorAppointments")
+  doctorUnavailable    DoctorUnavailable[]
+  availability         DoctorAvailability?
+  sentInvitations      Invitation[]        @relation("SentInvitations")
+  acceptedInvitations  Invitation[]        @relation("AcceptedInvitations")
   patientFilesUploaded PatientFile[]
 
   deletedAt DateTime?
@@ -135,30 +135,30 @@ enum UserRole {
 }
 
 model Patient {
-  id              String    @id @default(uuid())
-  tenantId        String
-  tenant          Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  firstName       String
-  lastName        String
-  email           String?
-  phone           String?  
-  dateOfBirth     DateTime?
-  gender          Gender?
-  source          PatientSource?
-  address         String?
+  id          String         @id @default(uuid())
+  tenantId    String
+  tenant      Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  firstName   String
+  lastName    String
+  email       String?
+  phone       String?
+  dateOfBirth DateTime?
+  gender      Gender?
+  source      PatientSource?
+  address     String?
 
-  appointments  Appointment[]
-  patientFiles  PatientFile[]
-  cases         Case[]
-  visitNotes    VisitNote[]
-  transactions  Transaction[]
-  messageLogs   MessageLog[]
+  appointments Appointment[]
+  patientFiles PatientFile[]
+  cases        Case[]
+  visitNotes   VisitNote[]
+  transactions Transaction[]
+  messageLogs  MessageLog[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([firstName, lastName])
   @@unique([tenantId, phone])
+  @@index([firstName, lastName])
 }
 
 enum Gender {
@@ -192,20 +192,20 @@ enum MessageStatus {
 }
 
 model Service {
-  id          String   @id @default(uuid())
-  tenantId    String
-  tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  name        String
-  description String?
-  duration    Int
-  color       String
-  price       Decimal?
-  isActive        Boolean  @default(true)
-  isSetupDefault  Boolean  @default(false)
+  id             String   @id @default(uuid())
+  tenantId       String
+  tenant         Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  name           String
+  description    String?
+  duration       Int
+  color          String
+  price          Decimal?
+  isActive       Boolean  @default(true)
+  isSetupDefault Boolean  @default(false)
 
   appointments Appointment[]
 
-  transactions  Transaction[]
+  transactions Transaction[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -242,21 +242,21 @@ model DoctorUnavailable {
 }
 
 model Appointment {
-  id              String            @id @default(uuid())
-  tenantId        String
-  tenant          Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  patientId       String
-  patient         Patient           @relation(fields: [patientId], references: [id], onDelete: Cascade)
-  doctorId        String
-  doctor          Profile           @relation("DoctorAppointments", fields: [doctorId], references: [id], onDelete: Restrict)
-  serviceId       String
-  service         Service           @relation(fields: [serviceId], references: [id], onDelete: Restrict)
-  caseId          String?
-  case            Case?             @relation(fields: [caseId], references: [id], onDelete: SetNull)
-  startTime       DateTime
-  endTime         DateTime
-  status          AppointmentStatus @default(SCHEDULED)
-  notes           String?
+  id        String            @id @default(uuid())
+  tenantId  String
+  tenant    Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  patientId String
+  patient   Patient           @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  doctorId  String
+  doctor    Profile           @relation("DoctorAppointments", fields: [doctorId], references: [id], onDelete: Restrict)
+  serviceId String
+  service   Service           @relation(fields: [serviceId], references: [id], onDelete: Restrict)
+  caseId    String?
+  case      Case?             @relation(fields: [caseId], references: [id], onDelete: SetNull)
+  startTime DateTime
+  endTime   DateTime
+  status    AppointmentStatus @default(SCHEDULED)
+  notes     String?
 
   visitNotes   VisitNote[]
   transactions Transaction[]
@@ -278,11 +278,11 @@ enum AppointmentStatus {
 }
 
 model PatientFile {
-  id            String   @id @default(uuid())
-  tenantId      String
-  tenant        Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  patientId     String
-  patient       Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  id        String  @id @default(uuid())
+  tenantId  String
+  tenant    Tenant  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  patientId String
+  patient   Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
 
   name        String
   storagePath String
@@ -368,7 +368,7 @@ model VisitNote {
   patient       Patient      @relation(fields: [patientId], references: [id], onDelete: Cascade)
   appointmentId String?
   appointment   Appointment? @relation(fields: [appointmentId], references: [id], onDelete: SetNull)
-  content       String?      // free-text clinical notes
+  content       String? // free-text clinical notes
   diagnosis     String?
   medications   Medication[]
   notes         String?
@@ -383,13 +383,13 @@ model VisitNote {
 }
 
 model Medication {
-  id          String    @id @default(uuid())
-  visitNoteId String
-  visitNote   VisitNote @relation(fields: [visitNoteId], references: [id], onDelete: Cascade)
-  name        String
-  dose        String?
-  frequency   String?
-  duration    String?
+  id           String    @id @default(uuid())
+  visitNoteId  String
+  visitNote    VisitNote @relation(fields: [visitNoteId], references: [id], onDelete: Cascade)
+  name         String
+  dose         String?
+  frequency    String?
+  duration     String?
   instructions String?
 
   @@index([visitNoteId])
@@ -462,7 +462,7 @@ model Reminder {
   type                 ReminderType
   name                 String
   isActive             Boolean      @default(true)
-  triggerBeforeMinutes Int?         // minutes before appointment start (for REMINDER type: 1440 = 24h)
+  triggerBeforeMinutes Int? // minutes before appointment start (for REMINDER type: 1440 = 24h)
   createdAt            DateTime     @default(now())
   updatedAt            DateTime     @updatedAt
 
@@ -471,26 +471,76 @@ model Reminder {
   @@unique([tenantId, type])
 }
 
+enum BlogPostStatus {
+  DRAFT
+  PUBLISHED
+}
+
+model BlogCategory {
+  id             String  @id @default(uuid())
+  slug           String  @unique
+  name           String
+  description    String?
+  seoTitle       String?
+  seoDescription String?
+  order          Int     @default(0)
+
+  posts BlogPost[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([order])
+}
+
+model BlogPost {
+  id             String         @id @default(uuid())
+  slug           String         @unique
+  title          String
+  excerpt        String?
+  content        String // Markdown body
+  coverImage     String? // Public URL
+  coverImagePath String? // Storage path (for deletion)
+  status         BlogPostStatus @default(DRAFT)
+  publishedAt    DateTime?
+  seoTitle       String?
+  seoDescription String?
+  canonicalUrl   String?
+  noIndex        Boolean        @default(false)
+  readingTimeMin Int?
+  tags           String[]       @default([])
+  authorName     String?
+
+  categoryId String?
+  category   BlogCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status, publishedAt])
+  @@index([categoryId])
+}
+
 model MessageLog {
-  id            String        @id @default(uuid())
-  tenantId      String
-  tenant        Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  reminderId    String?
-  reminder      Reminder?     @relation(fields: [reminderId], references: [id], onDelete: SetNull)
-  type          ReminderType
-  appointmentId String?
-  appointment   Appointment?  @relation(fields: [appointmentId], references: [id], onDelete: SetNull)
-  patientId     String?
-  patient       Patient?      @relation(fields: [patientId], references: [id], onDelete: SetNull)
-  toPhone       String
+  id             String        @id @default(uuid())
+  tenantId       String
+  tenant         Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  reminderId     String?
+  reminder       Reminder?     @relation(fields: [reminderId], references: [id], onDelete: SetNull)
+  type           ReminderType
+  appointmentId  String?
+  appointment    Appointment?  @relation(fields: [appointmentId], references: [id], onDelete: SetNull)
+  patientId      String?
+  patient        Patient?      @relation(fields: [patientId], references: [id], onDelete: SetNull)
+  toPhone        String
   messageContent String
-  status        MessageStatus @default(QUEUED)
-  externalId    String?       // WhatsApp message ID (wamid.xxx)
-  sentAt        DateTime?
-  deliveredAt   DateTime?
-  readAt        DateTime?
-  errorMessage  String?
-  createdAt     DateTime      @default(now())
+  status         MessageStatus @default(QUEUED)
+  externalId     String? // WhatsApp message ID (wamid.xxx)
+  sentAt         DateTime?
+  deliveredAt    DateTime?
+  readAt         DateTime?
+  errorMessage   String?
+  createdAt      DateTime      @default(now())
 
   @@index([tenantId, createdAt])
   @@index([appointmentId])

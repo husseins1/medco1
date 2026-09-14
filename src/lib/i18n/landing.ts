@@ -36,6 +36,7 @@ export const landingContent = {
     { label: "الباقات", href: "#pricing" },
     { label: "أسئلة شائعة", href: "#faq" },
     { label: "مركز المساعدة", href: "/help" },
+    { label: "المدونة", href: "/blog" },
   ],
   navCta: {
     login: "دخول",
@@ -412,6 +413,7 @@ export const landingContent = {
         links: [
           { label: "الأسئلة الشائعة", href: "#faq" },
           { label: "مركز المساعدة", href: "/help" },
+          { label: "المدونة", href: "/blog" },
           { label: "فيديوهات تعليمية", href: "#" },
           { label: "دعم واتساب", href: "https://wa.me/9647806969277" },
         ],
