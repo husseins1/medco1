@@ -10,8 +10,9 @@ import { Badge } from "@/components/ui/Badge";
 import { formatDate } from "@/lib/date-utils";
 import { deriveExcerpt } from "@/lib/blog/utils";
 import { getPublishedPostBySlug, getRelatedPosts } from "@/lib/blog/queries";
+import { absoluteUrl, getSiteUrl } from "@/lib/site-url";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+const siteUrl = getSiteUrl();
 
 interface PostPageProps {
   params: Promise<{ slug: string }>;
@@ -60,21 +61,21 @@ export default async function BlogPostPage({ params }: PostPageProps) {
   if (!post) notFound();
 
   const related = await getRelatedPosts(post.id, post.categoryId);
-  const pageUrl = `${siteUrl}/blog/${post.slug}`;
+  const pageUrl = absoluteUrl(`/blog/${post.slug}`);
 
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "الرئيسية", item: siteUrl },
-      { "@type": "ListItem", position: 2, name: "المدونة", item: `${siteUrl}/blog` },
+      { "@type": "ListItem", position: 2, name: "المدونة", item: absoluteUrl("/blog") },
       ...(post.category
         ? [
             {
               "@type": "ListItem",
               position: 3,
               name: post.category.name,
-              item: `${siteUrl}/blog/category/${post.category.slug}`,
+              item: absoluteUrl(`/blog/category/${post.category.slug}`),
             },
           ]
         : []),
@@ -104,7 +105,7 @@ export default async function BlogPostPage({ params }: PostPageProps) {
       "@type": "Organization",
       name: "طبيب تري",
       url: siteUrl,
-      logo: { "@type": "ImageObject", url: `${siteUrl}/ttLogo.svg` },
+      logo: { "@type": "ImageObject", url: absoluteUrl("/ttLogo.svg") },
     },
   };
 

@@ -4,8 +4,9 @@ import { ArrowLeft, Sparkles } from "lucide-react";
 import { helpCategories, helpTopics } from "@/lib/help/topics";
 import { Card, CardContent } from "@/components/ui/Card";
 import { JsonLd } from "@/components/JsonLd";
+import { absoluteUrl, getSiteUrl } from "@/lib/site-url";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+const siteUrl = getSiteUrl();
 
 export const metadata: Metadata = {
   title: {
@@ -47,7 +48,7 @@ const breadcrumbJsonLd = {
       "@type": "ListItem",
       position: 2,
       name: "مركز المساعدة",
-      item: `${siteUrl}/help`,
+      item: absoluteUrl("/help"),
     },
   ],
 };
@@ -58,11 +59,11 @@ const collectionJsonLd = {
   name: "مركز المساعدة — طبيب تري",
   description:
     "شروحات عربية خطوة بخطوة لكل أقسام طبيب تري: المواعيد، المرضى، الفواتير، التذكيرات، والإحصاءات.",
-  url: `${siteUrl}/help`,
+  url: absoluteUrl("/help"),
   hasPart: helpTopics.map((topic) => ({
     "@type": "WebPage",
     name: topic.title,
-    url: `${siteUrl}/help/${topic.slug}`,
+    url: absoluteUrl(`/help/${topic.slug}`),
     description: topic.seoDescription ?? topic.description,
   })),
 };

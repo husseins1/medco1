@@ -8,6 +8,7 @@ import type { UserRole } from "@/lib/types/auth";
 import { enforceDoctorLimit } from "@/lib/plans/enforce";
 import resendClient from "@/lib/resend";
 import { serviceRoleClient } from "@/utils/supabase/service-role";
+import { absoluteUrl } from "@/lib/site-url";
 
 const createInviteSchema = z.object({
   email: z.string().email({ message: "البريد الإلكتروني غير صالح" }),
@@ -110,7 +111,7 @@ const tokenHash = url.searchParams.get('token')
     html: `<p>مرحباً،</p>
     <p>لقد تلقيت دعوة للانضمام إلى MedLink كـ ${role.toLowerCase()}.</p>
     <p>انقر على الرابط أدناه لتسجيل الدخول وإنهاء عملية الانضمام:</p>
-    <p><a href="${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/auth/callback?token_hash=${tokenHash}&type=magiclink&redirect=${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/auth/callback?invitation_id=${invitation.id}">انقر هنا</a></p>
+    <p><a href="${absoluteUrl(`/auth/callback?token_hash=${tokenHash}&type=magiclink&redirect=${encodeURIComponent(absoluteUrl(`/auth/callback?invitation_id=${invitation.id}`))}`)}">انقر هنا</a></p>
     <p>تحياتنا،</p>
     <p>MedLink</p>`,
   });

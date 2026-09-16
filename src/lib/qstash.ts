@@ -1,5 +1,7 @@
 import { Client, Receiver } from "@upstash/qstash";
 
+import { getSiteUrl } from "@/lib/site-url";
+
 function getQstashToken() {
   const token = process.env.QSTASH_TOKEN;
   if (!token) {
@@ -19,11 +21,11 @@ export function getQstashClient(): Client {
 
 export function getBaseUrl(): string {
   if (process.env.NEXT_PUBLIC_SITE_URL) {
-    return `https://${process.env.NEXT_PUBLIC_SITE_URL}`;
+    return getSiteUrl();
   }
-  const siteUrl = process.env.VERCEL_URL;
-  if (siteUrl) {
-    return siteUrl;
+  const vercelUrl = process.env.VERCEL_URL;
+  if (vercelUrl) {
+    return `https://${vercelUrl}`;
   }
   throw new Error(
     "Neither VERCEL_URL nor NEXT_PUBLIC_SITE_URL is set. Cannot determine base URL for QStash callback.",

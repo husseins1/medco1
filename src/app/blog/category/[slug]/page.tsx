@@ -12,8 +12,9 @@ import {
   getPublishedCategoryBySlug,
   getPublishedPosts,
 } from "@/lib/blog/queries";
+import { absoluteUrl, getSiteUrl } from "@/lib/site-url";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+const siteUrl = getSiteUrl();
 
 interface CategoryPageProps {
   params: Promise<{ slug: string }>;
@@ -66,14 +67,14 @@ export default async function CategoryPage({
       getPublishedCategoriesWithCounts(),
     ]);
 
-  const pageUrl = `${siteUrl}/blog/category/${category.slug}`;
+  const pageUrl = absoluteUrl(`/blog/category/${category.slug}`);
 
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "الرئيسية", item: siteUrl },
-      { "@type": "ListItem", position: 2, name: "المدونة", item: `${siteUrl}/blog` },
+      { "@type": "ListItem", position: 2, name: "المدونة", item: absoluteUrl("/blog") },
       { "@type": "ListItem", position: 3, name: category.name, item: pageUrl },
     ],
   };

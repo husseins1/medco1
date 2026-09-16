@@ -10,6 +10,7 @@ import { SLUG_REGEX } from "@/lib/slug-utils";
 import QRCode from "qrcode";
 import { DEFAULT_SCHEDULE, DEFAULT_ADVANCED } from "@/components/features/availability/constants";
 import { sendMetaEvent } from "@/lib/meta/capi";
+import { absoluteUrl } from "@/lib/site-url";
 
 const setupSchema = z.object({
   name: z.string().min(2, "اسم العيادة يجب أن يحتوي على حرفين الأقل"),
@@ -93,8 +94,7 @@ export async function submitSetupWizard(formData: FormData) {
   const firstName = nameParts[0] || doctorName;
   const lastName = nameParts.slice(1).join(" ") || "";
 
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
-  const clinicUrl = `${baseUrl}/${slug}`;
+  const clinicUrl = absoluteUrl(slug);
 
   const qrCodeDataUrl = await QRCode.toDataURL(clinicUrl, {
     width: 300,

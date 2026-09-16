@@ -1,5 +1,7 @@
 import { cookies, headers } from "next/headers";
 
+import { getSiteUrl } from "@/lib/site-url";
+
 export type MetaEventName =
   | "Lead"
   | "ViewContent"
@@ -36,9 +38,7 @@ async function sha256(value: string): Promise<string> {
 
 function getEventSourceUrl(requestHeaders: Headers): string {
   return (
-    requestHeaders.get("referer") ??
-    process.env.NEXT_PUBLIC_SITE_URL ??
-    "http://localhost:3000"
+    requestHeaders.get("referer") ?? getSiteUrl()
   );
 }
 

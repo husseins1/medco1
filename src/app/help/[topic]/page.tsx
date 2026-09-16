@@ -3,8 +3,9 @@ import type { Metadata } from "next";
 import { getHelpTopic, helpTopics } from "@/lib/help/topics";
 import { HelpTopicView } from "@/components/help/HelpTopicView";
 import { JsonLd } from "@/components/JsonLd";
+import { absoluteUrl, getSiteUrl } from "@/lib/site-url";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+const siteUrl = getSiteUrl();
 
 interface HelpTopicPageProps {
   params: Promise<{ topic: string }>;
@@ -53,7 +54,7 @@ export default async function HelpTopicPage({ params }: HelpTopicPageProps) {
 
   const headline = helpTopic.seoTitle ?? helpTopic.title;
   const description = helpTopic.seoDescription ?? helpTopic.description;
-  const pageUrl = `${siteUrl}/help/${helpTopic.slug}`;
+  const pageUrl = absoluteUrl(`/help/${helpTopic.slug}`);
 
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
@@ -69,7 +70,7 @@ export default async function HelpTopicPage({ params }: HelpTopicPageProps) {
         "@type": "ListItem",
         position: 2,
         name: "مركز المساعدة",
-        item: `${siteUrl}/help`,
+        item: absoluteUrl("/help"),
       },
       {
         "@type": "ListItem",
@@ -94,7 +95,7 @@ export default async function HelpTopicPage({ params }: HelpTopicPageProps) {
       url: siteUrl,
       logo: {
         "@type": "ImageObject",
-        url: `${siteUrl}/ttLogo.svg`,
+        url: absoluteUrl("/ttLogo.svg"),
       },
     },
   };

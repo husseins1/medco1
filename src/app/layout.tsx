@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Almarai } from "next/font/google";
 import { Providers } from "./providers";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/next"
+import { getSiteUrl } from "@/lib/site-url"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -21,9 +22,7 @@ const almarai = Almarai({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"
-  ),
+  metadataBase: new URL(getSiteUrl()),
   title: {
     default: "طبيب تري | Tabibtree",
     template: "%s | طبيب تري",

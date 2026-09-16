@@ -14,9 +14,10 @@ import { LpFaq } from "@/components/landingpage/lp-faq";
 import { LpFinalCta } from "@/components/landingpage/lp-final-cta";
 import { LpFooter } from "@/components/landingpage/lp-footer";
 import { MetaLandingView, MetaPixel } from "@/components/meta/meta-pixel";
+import { absoluteUrl, getSiteUrl } from "@/lib/site-url";
 
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+const siteUrl = getSiteUrl();
 
 export const metadata: Metadata = {
   title: {
@@ -55,7 +56,7 @@ const organizationJsonLd = {
   name: landingContent.jsonLd.organizationName,
   description: landingContent.jsonLd.organizationDescription,
   url: siteUrl,
-  logo: `${siteUrl}/ttLogo.svg`,
+  logo: absoluteUrl("/ttLogo.svg"),
   contactPoint: {
     "@type": "ContactPoint",
     telephone: "+964-780-696-9277",

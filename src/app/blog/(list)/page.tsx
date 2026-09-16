@@ -8,8 +8,9 @@ import {
   getPublishedCategoriesWithCounts,
   getPublishedPosts,
 } from "@/lib/blog/queries";
+import { absoluteUrl, getSiteUrl } from "@/lib/site-url";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+const siteUrl = getSiteUrl();
 
 const title = "مدونة طبيب تري — مقالات عن إدارة العيادات";
 const description =
@@ -49,13 +50,13 @@ export default async function BlogPage({
     "@type": "Blog",
     name: "مدونة طبيب تري",
     description,
-    url: `${siteUrl}/blog`,
+    url: absoluteUrl("/blog"),
     inLanguage: "ar",
     publisher: {
       "@type": "Organization",
       name: "طبيب تري",
       url: siteUrl,
-      logo: { "@type": "ImageObject", url: `${siteUrl}/ttLogo.svg` },
+      logo: { "@type": "ImageObject", url: absoluteUrl("/ttLogo.svg") },
     },
   };
 
