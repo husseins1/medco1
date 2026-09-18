@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Almarai } from "next/font/google";
 import { Providers } from "./providers";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/next"
+import { GoogleAnalytics } from "@next/third-parties/google"
 import { getSiteUrl } from "@/lib/site-url"
 
 const geistSans = Geist({
@@ -66,6 +67,9 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${almarai.variable} antialiased`}
       >
         <Analytics />
+        {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
+          <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID} />
+        )}
         <Providers>
           {children}
         </Providers>

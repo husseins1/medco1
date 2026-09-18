@@ -29,6 +29,11 @@ const envSchema = z.object({
   META_PIXEL_ID: z.string().optional(),
   META_TEST_EVENT_CODE: z.string().optional(),
   CMS_OWNER_EMAIL: z.string().email().optional(),
+  NEXT_PUBLIC_GA_MEASUREMENT_ID: z
+    .string()
+    .regex(/^G-[A-Z0-9]+$/)
+    .optional(),
+  
 });
 
 export function validateEnv() {
