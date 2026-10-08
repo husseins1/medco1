@@ -105,15 +105,16 @@ if (generateLinkError) {
 const tokenHash = url.searchParams.get('token')
 
   const { error } = await resendClient.emails.send({
-    from: "MedLink<contact@baghdadflow.com>",
+    from: "Baghdadflow<contact@baghdadflow.com>",
     to: email,
-    subject: "دعوة للانضمام إلى MedLink",
+    subject: "دعوة للانضمام إلى Tabibtree",
     html: `<p>مرحباً،</p>
-    <p>لقد تلقيت دعوة للانضمام إلى MedLink كـ ${role.toLowerCase()}.</p>
+    <p>لقد تلقيت دعوة للانضمام إلى Tabibtree كـ ${role.toLowerCase()}.</p>
     <p>انقر على الرابط أدناه لتسجيل الدخول وإنهاء عملية الانضمام:</p>
     <p><a href="${absoluteUrl(`/auth/callback?token_hash=${tokenHash}&type=magiclink&redirect=${encodeURIComponent(absoluteUrl(`/auth/callback?invitation_id=${invitation.id}`))}`)}">انقر هنا</a></p>
+    <p><a href="${absoluteUrl(`/auth/callback?token_hash=${tokenHash}&type=magiclink&redirect=${encodeURIComponent(absoluteUrl(`/auth/callback?invitation_id=${invitation.id}`))}`)}">${absoluteUrl(`/auth/callback?token_hash=${tokenHash}&type=magiclink&redirect=${encodeURIComponent(absoluteUrl(`/auth/callback?invitation_id=${invitation.id}`))}`)}</a></p>
     <p>تحياتنا،</p>
-    <p>MedLink</p>`,
+    <p>Baghdadflow</p>`,
   });
   
   if (error) {
