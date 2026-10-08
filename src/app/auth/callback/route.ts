@@ -1,47 +1,67 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
-import type { EmailOtpType } from '@supabase/supabase-js'
+import type { EmailOtpType, Session, User } from '@supabase/supabase-js'
 import { acceptInvitation } from '@/lib/invite'
 import { sendMetaEvent } from '@/lib/meta/capi'
 import prisma from '@/lib/prisma'
+import { z } from 'zod'
+
+const emailOtpTypeSchema = z.enum([
+  'email', 'signup', 'invite', 'magiclink', 'recovery', 'email_change',
+] satisfies EmailOtpType[])
 
 function getRedirectUrl(request: Request, origin: string, path: string): string {
   const forwardedHost = request.headers.get('x-forwarded-host')
-  const isLocalEnv = process.env.NODE_ENV === 'development'
-
-  if (isLocalEnv) {
-    return `${origin}${path}`
-  } else if (forwardedHost) {
-    return `https://${forwardedHost}${path}`
+  const base = process.env.NODE_ENV !== 'development' && forwardedHost
+    ? `https://${forwardedHost}`
+    : origin
+  try {
+    const destination = new URL(path, base)
+    if (destination.origin === new URL(base).origin) return destination.toString()
+  } catch {
+    // Invalid destinations must not prevent the auth link from being verified.
   }
-  return `${origin}${path}`
+  return new URL('/dashboard', base).toString()
 }
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
   const { searchParams, origin } = new URL(request.url)
-  let invitationId = searchParams.get('redirect')
-  if (invitationId) {
-    invitationId = new URL(invitationId).searchParams.get('invitation_id')
+  const response = NextResponse.redirect(
+    getRedirectUrl(request, origin, searchParams.get('next') || '/dashboard')
+  )
+
+  function authError(message: string): NextResponse {
+    const url = new URL(getRedirectUrl(request, origin, '/auth/auth-error'))
+    url.searchParams.set('error', message)
+    // Keep session updates and cookie deletions on error redirects too.
+    response.headers.set('Location', url.toString())
+    return response
   }
 
-  const next = searchParams.get('next') || '/dashboard'
-
-  async function handleAuthSuccess(supabase: ReturnType<typeof createServerClient>) {
-    if (!invitationId) return
-
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user?.email) return
-
-    const result = await acceptInvitation(invitationId, user.id, user.email)
-    if (result.success) {
-      await supabase.auth.refreshSession()
+  let invitationId = searchParams.get('invitation_id')
+  const legacyRedirect = searchParams.get('redirect')
+  if (!invitationId && legacyRedirect) {
+    try {
+      invitationId = new URL(legacyRedirect, origin).searchParams.get('invitation_id')
+    } catch {
+      return authError('Invalid invitation redirect')
     }
   }
 
-  // Create the redirect response first, then attach the supabase client to it
-  // so cookies are set on the same response object that gets returned.
-  const redirectTo = getRedirectUrl(request, origin, next)
-  const response = NextResponse.redirect(redirectTo)
+  const code = searchParams.get('code')
+  const tokenHash = searchParams.get('token_hash')
+  const type = emailOtpTypeSchema.safeParse(searchParams.get('type'))
+  if (!code && (searchParams.has('token_hash') || searchParams.has('type'))) {
+    if (!tokenHash || !type.success) return authError('Invalid verification parameters')
+  }
+
+  const hasAuthCredentials = Boolean(code || tokenHash)
+  // Supabase's initial auth listener reads storage before verification. Hide
+  // the previous session, but retain its cookie names for stale chunk cleanup.
+  const authCookies = new Map(request.cookies.getAll().map(({ name, value }) => [
+    name,
+    hasAuthCredentials && /^sb-.+-auth-token(?:\.\d+)?$/.test(name) ? '' : value,
+  ]))
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -49,81 +69,65 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     {
       cookies: {
         getAll() {
-          return request.cookies.getAll()
+          return Array.from(authCookies, ([name, value]) => ({ name, value }))
         },
         setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value, options }) =>
+          cookiesToSet.forEach(({ name, value, options }) => {
+            authCookies.set(name, value)
+            request.cookies.set(name, value)
             response.cookies.set(name, value, {
               ...options,
-              sameSite: "lax",
+              sameSite: 'lax',
               httpOnly: true,
-              secure: process.env.NODE_ENV === "production",
-              path: "/",
+              secure: process.env.NODE_ENV === 'production',
+              path: '/',
             })
-          )
+          })
         },
       },
     }
   )
 
-  // --- Strategy 1: PKCE code exchange (same-browser confirmation) ---
-  const code = searchParams.get('code')
-  if (code) {
-    const { error } = await supabase.auth.exchangeCodeForSession(code)
-    if (!error) {
-      await handleAuthSuccess(supabase)
-      if (!invitationId) {
-        const { data: { user } } = await supabase.auth.getUser()
-        if (user?.email) {
-          const profile = await prisma.profile.findUnique({
-            where: { email: user.email },
-            select: { id: true },
-          })
-          if (!profile) {
-            await sendMetaEvent('Lead', { email: user.email })
-          }
-        }
-      }
-      return response
-    }
-    // Pass the error message to the error page
-    const errorMsg = error?.message || 'unknown'
-    return NextResponse.redirect(`${origin}/auth/auth-error?error=${encodeURIComponent(errorMsg)}`)
-  }
+  async function handleAuthSuccess(user: User, session?: Session | null): Promise<NextResponse> {
+    if (invitationId) {
+      if (!user.email) return authError('Missing invitation email')
 
-  // --- Strategy 2: token_hash verification (cross-browser confirmation) ---
-  const tokenHash = searchParams.get('token_hash')
-  const type = searchParams.get('type') as EmailOtpType | null
-  if (tokenHash && type) {
-    const { error } = await supabase.auth.verifyOtp({
-      token_hash: tokenHash,
-      type,
-    })
-    if (!error) {
-      await handleAuthSuccess(supabase)
-      if (!invitationId) {
-        const { data: { user } } = await supabase.auth.getUser()
-        if (user?.email) {
-          const profile = await prisma.profile.findUnique({
-            where: { email: user.email },
-            select: { id: true },
-          })
-          if (!profile) {
-            await sendMetaEvent('Lead', { email: user.email })
-          }
-        }
-      }
-      return response
-    }
-  }
+      const result = await acceptInvitation(invitationId, user.id, user.email)
+      if (!result.success) return authError(result.error || 'Invitation acceptance failed')
 
-  // --- Strategy 3: already authenticated and just needs to accept the invite ---
-  const { data: { user }, error } = await supabase.auth.getUser()
-  if (user && !error) {
-    await handleAuthSuccess(supabase)
+      // Refresh the verified session after Profile changes so the JWT contains
+      // the invited role and tenant, even if the browser arrived with old cookies.
+      const { error } = await supabase.auth.refreshSession(session ?? undefined)
+      if (error) return authError(error.message)
+    } else if (user.email) {
+      const profile = await prisma.profile.findUnique({
+        where: { email: user.email },
+        select: { id: true },
+      })
+      if (!profile) await sendMetaEvent('Lead', { email: user.email })
+    }
     return response
   }
 
-  // return the user to an error page with instructions
-  return NextResponse.redirect(`${origin}/auth/auth-error`)
+  if (code) {
+    const { data, error } = await supabase.auth.exchangeCodeForSession(code)
+    if (error) return authError(error.message)
+    if (!data.user || !data.session) return authError('Missing verified session')
+    return handleAuthSuccess(data.user, data.session)
+  }
+
+  if (tokenHash && type.success) {
+    const { data, error } = await supabase.auth.verifyOtp({
+      token_hash: tokenHash,
+      type: type.data,
+    })
+    // A failed one-time link must not fall back to a different browser user.
+    if (error) return authError(error.message)
+    if (!data.user || !data.session) return authError('Missing verified session')
+    return handleAuthSuccess(data.user, data.session)
+  }
+
+  const { data: { user }, error } = await supabase.auth.getUser()
+  if (error || !user) return authError(error?.message || 'Missing authenticated user')
+  return handleAuthSuccess(user)
 }

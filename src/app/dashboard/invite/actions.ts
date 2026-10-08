@@ -81,28 +81,20 @@ export async function createInvitation(formData: FormData) {
     },
   });
 
-  // const { error } = await supabase.auth.signInWithOtp({
-  //   email,
-  //   options: {
-  //     emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/auth/callback?invitation_id=${invitation.id}`,
-  //     data: {
-  //       invitation_id: invitation.id,
-  //       type: "invite",
-  //     },
-  //   },
-  // });
-
   const { data, error: generateLinkError } = await serviceRoleClient.auth.admin.generateLink({
-    email, type: "magiclink",
+    email,
+    type: "magiclink",
   });
-  
 
-if (generateLinkError) {
+  if (generateLinkError) {
     return { error: generateLinkError.message };
-  };
+  }
 
-  const url = new URL(data.properties.action_link)
-const tokenHash = url.searchParams.get('token')
+  const inviteUrl = new URL(absoluteUrl("/auth/callback"));
+  inviteUrl.searchParams.set("token_hash", data.properties.hashed_token);
+  inviteUrl.searchParams.set("type", data.properties.verification_type);
+  inviteUrl.searchParams.set("invitation_id", invitation.id);
+  const inviteLink = inviteUrl.toString();
 
   const { error } = await resendClient.emails.send({
     from: "Baghdadflow<contact@baghdadflow.com>",
@@ -111,8 +103,8 @@ const tokenHash = url.searchParams.get('token')
     html: `<p>مرحباً،</p>
     <p>لقد تلقيت دعوة للانضمام إلى Tabibtree كـ ${role.toLowerCase()}.</p>
     <p>انقر على الرابط أدناه لتسجيل الدخول وإنهاء عملية الانضمام:</p>
-    <p><a href="${absoluteUrl(`/auth/callback?token_hash=${tokenHash}&type=magiclink&redirect=${encodeURIComponent(absoluteUrl(`/auth/callback?invitation_id=${invitation.id}`))}`)}">انقر هنا</a></p>
-    <p><a href="${absoluteUrl(`/auth/callback?token_hash=${tokenHash}&type=magiclink&redirect=${encodeURIComponent(absoluteUrl(`/auth/callback?invitation_id=${invitation.id}`))}`)}">${absoluteUrl(`/auth/callback?token_hash=${tokenHash}&type=magiclink&redirect=${encodeURIComponent(absoluteUrl(`/auth/callback?invitation_id=${invitation.id}`))}`)}</a></p>
+    <p><a href="${inviteLink}">انقر هنا</a></p>
+    <p><a href="${inviteLink}">${inviteLink}</a></p>
     <p>تحياتنا،</p>
     <p>Baghdadflow</p>`,
   });
